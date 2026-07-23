@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RightArmMask
+  m_Mask: 00000000010000000100000000000000000000000000000001000000000000000100000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/pelvis
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/Bone.004
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/Bone.004/Bone.005
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/Bone.004/Bone.005/Bone.005_end
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder/left
+      bicep
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder/left
+      bicep/left bicep.001
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder/left
+      bicep/left bicep.001/left forearm
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder/left
+      bicep/left bicep.001/left forearm/left hand
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/left collar/left shoulder/left
+      bicep/left bicep.001/left forearm/left hand/left hand_end
+    m_Weight: 0
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder/right
+      bicep
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder/right
+      bicep/right bicep.001
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder/right
+      bicep/right bicep.001/right forearm
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder/right
+      bicep/right bicep.001/right forearm/right hand
+    m_Weight: 1
+  - m_Path: Armature/pelvis/hip/abs/lower chest/upper chest/right collar/right shoulder/right
+      bicep/right bicep.001/right forearm/right hand/right hand_end
+    m_Weight: 1
+  - m_Path: Armature/pelvis/left hip
+    m_Weight: 0
+  - m_Path: Armature/pelvis/left hip/left upper leg
+    m_Weight: 0
+  - m_Path: Armature/pelvis/left hip/left upper leg/left lower leg
+    m_Weight: 0
+  - m_Path: Armature/pelvis/left hip/left upper leg/left lower leg/left heel
+    m_Weight: 0
+  - m_Path: Armature/pelvis/left hip/left upper leg/left lower leg/left heel/left
+      toes
+    m_Weight: 0
+  - m_Path: Armature/pelvis/left hip/left upper leg/left lower leg/left heel/left
+      toes/left toes_end
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip/right upper leg
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip/right upper leg/right lower leg
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip/right upper leg/right lower leg/right heel
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip/right upper leg/right lower leg/right heel/right
+      toes
+    m_Weight: 0
+  - m_Path: Armature/pelvis/right hip/right upper leg/right lower leg/right heel/right
+      toes/right toes_end
+    m_Weight: 0
+  - m_Path: Body Armor
+    m_Weight: 0
+  - m_Path: character 2.0
+    m_Weight: 0
+  - m_Path: Leg Armor
+    m_Weight: 0
