@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float turnSpeed = 10f;
 
     public Transform cameraPos;
+    public CameraManager cameraManager;
 
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float groundRayDistance = 1.5f;
@@ -45,6 +46,10 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         HandleMovement();
+    }
+
+    void LateUpdate()
+    {
         RotatePlayer();
     }
 
@@ -124,16 +129,18 @@ public class PlayerMovement : MonoBehaviour
 
     void RotatePlayer()
     {
-        if (moveInput.magnitude <= 0.01f) return;
+        bool isThirdPerson = cameraManager.isThirdPerson;
 
-        float cameraYaw = cameraPos.eulerAngles.y;
+        
+        if (cameraManager.isBlending)
+            return;
 
-        float offsetDeg = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg;
-        float targetYaw = cameraYaw + offsetDeg;
-        float currentYaw = transform.eulerAngles.y;
+        // In third person mode we only rotate character when player intends to move.
+        // In first person mode we always rotate character where player is looking.
+        if (isThirdPerson && moveInput.magnitude <= 0.01f) return;
 
-        float smoothYaw = Mathf.LerpAngle(currentYaw, targetYaw, turnSpeed * Time.deltaTime);
+        float finalYaw = cameraManager.CalculateYaw(moveInput);
 
-        transform.rotation = Quaternion.Euler(0f, smoothYaw, 0f);
+        transform.rotation = Quaternion.Euler(0f, finalYaw, 0f);
     }
 }

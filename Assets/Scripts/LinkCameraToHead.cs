@@ -7,8 +7,12 @@ public class LinkCameraToHead : MonoBehaviour
     public Vector3 cameraOffset;
     public Transform headBonePos;
 
+    
     void LateUpdate()
     {
-        if (headBonePos != null) transform.position = headBonePos.position + headBonePos.TransformDirection(cameraOffset);
+        if (headBonePos != null)
+        {
+            transform.position = headBonePos.position + headBonePos.TransformDirection(cameraOffset);
+        }
     }
 }
