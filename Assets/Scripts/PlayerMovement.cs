@@ -134,6 +134,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (value.isPressed)
         {
+            if (isSprinting) return;
             Debug.Log("Start sprint");
             movementSpeed *= sprintMultiplier;
             isSprinting = true;
