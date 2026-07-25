@@ -156,7 +156,8 @@ public class PlayerMovement : MonoBehaviour
 
         // In third person mode we only rotate character when player intends to move.
         // In first person mode we always rotate character where player is looking.
-        if (isThirdPerson && moveInput.magnitude <= 0.01f) return;
+        if (isThirdPerson && !cameraManager.isLockedOn && moveInput.magnitude <= 0.01f)
+            return;
 
         float finalYaw = cameraManager.CalculateYaw(moveInput);
 

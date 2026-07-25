@@ -17,6 +17,7 @@ public class CameraManager : MonoBehaviour
     
     [Header("InputKeys")]
     public Key toggleCameraKey = Key.Q;
+    public Key cameraLockKey = Key.E;
 
     public float sensitivity = 1f;
 
@@ -32,6 +33,23 @@ public class CameraManager : MonoBehaviour
     public float yawToRotate = 0;
 
     [SerializeField] private float turnSpeed = 10f;
+
+    [Header("Lock On")]
+    [SerializeField] private CinemachineVirtualCamera lockOnCamera;
+
+    [SerializeField] private CinemachineTargetGroup lockOnTargetGroup;
+
+    [SerializeField] private float lockOnTurnSpeed = 12f;
+
+    private Transform lockedTarget;
+
+    public bool isLockedOn => lockedTarget != null;
+
+    [SerializeField] private Transform testEnemy;
+
+    [SerializeField] private Transform thirdPersonTarget;
+
+
 
 
     // Start is called before the first frame update
@@ -58,11 +76,30 @@ public class CameraManager : MonoBehaviour
             return virtualCam.State.FinalOrientation.eulerAngles.y;
         }
 
+
+        float targetYaw;
+
+        if (isLockedOn)
+        {
+            Vector3 targetDirection = lockedTarget.position - player.position;
+
+            targetDirection.y = 0f;
+
+            if (targetDirection.sqrMagnitude > 0.001f)
+            {
+                targetYaw = Mathf.Atan2(targetDirection.x, targetDirection.z) * Mathf.Rad2Deg;
+
+                return Mathf.LerpAngle(player.eulerAngles.y, targetYaw, lockOnTurnSpeed * Time.deltaTime);
+            }
+
+            return player.eulerAngles.y;
+        }
+
         float cameraYaw = freeLookCamera.State.FinalOrientation.eulerAngles.y;
 
         float offsetDeg = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg;
 
-        float targetYaw = cameraYaw + offsetDeg;
+        targetYaw = cameraYaw + offsetDeg;
 
         return Mathf.LerpAngle(player.eulerAngles.y,targetYaw,turnSpeed * Time.deltaTime);
     }
@@ -79,6 +116,13 @@ public class CameraManager : MonoBehaviour
 
         // Camera toggle
         if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame) ToggleView();
+        if (Keyboard.current != null && Keyboard.current[cameraLockKey].wasPressedThisFrame)
+        {
+            if (isLockedOn)
+                ToggleView();
+            else
+                LockOntoTarget(testEnemy);
+        }
     }
 
     public void ApplySensitivity()
@@ -91,6 +135,13 @@ public class CameraManager : MonoBehaviour
     {
         if (cinemachineBrain.IsBlending)
             return;
+
+        if (isLockedOn)
+        {
+            lockedTarget = null;
+            lockOnCamera.Priority = 5;
+            isThirdPerson = false;
+        }
 
         isThirdPerson = !isThirdPerson;
 
@@ -120,5 +171,43 @@ public class CameraManager : MonoBehaviour
             freeLookCamera.Priority = 10;
             virtualCam.Priority = 20;
         }
+    }
+
+    private void ConfigureLockOnGroup(Transform enemy)
+    {
+        lockOnTargetGroup.m_Targets = new CinemachineTargetGroup.Target[] 
+        { 
+            new CinemachineTargetGroup.Target {
+                target = thirdPersonTarget, 
+                weight = 1f, radius = 1f
+                },
+            new CinemachineTargetGroup.Target {
+                target = enemy,
+                weight = 1f,
+                radius = 1f
+                }
+        };
+    }
+
+    public void LockOntoTarget(Transform target)
+    {
+        if (target == null)
+            return;
+
+        if (isBlending)
+            return;
+
+        lockedTarget = target;
+
+        ConfigureLockOnGroup(target);
+
+        // Lock-on is a third-person state.
+        isThirdPerson = true;
+
+        lockOnCamera.PreviousStateIsValid = false;
+
+        virtualCam.Priority = 5;
+        freeLookCamera.Priority = 10;
+        lockOnCamera.Priority = 30;
     }
 }
