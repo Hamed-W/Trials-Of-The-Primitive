@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float fallingVelocityThreshold;
 
+    public float sprintMultiplier;
+    private bool isSprinting = false;
+
 
     void Awake()
     {
@@ -105,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         AnimState finalAnimation = (characterController.velocity.y < -fallingVelocityThreshold
         ? AnimState.Falling
         : (moveInput.sqrMagnitude > 0.001f
-            ? AnimState.Walking
+            ? (isSprinting == true? AnimState.Running : AnimState.Walking)
             : AnimState.Idle));
 
         playerAnimScript.SetAnimState(finalAnimation);
@@ -124,6 +127,22 @@ public class PlayerMovement : MonoBehaviour
         if (characterController.isGrounded)
         {
             canJump = true;
+        }
+    }
+
+    void OnSprint(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            Debug.Log("Start sprint");
+            movementSpeed *= sprintMultiplier;
+            isSprinting = true;
+        }
+        else
+        {
+            Debug.Log("Stop sprint");
+            movementSpeed /= sprintMultiplier;
+            isSprinting = false;
         }
     }
 
