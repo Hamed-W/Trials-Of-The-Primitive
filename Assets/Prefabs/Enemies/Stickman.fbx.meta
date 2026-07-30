@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: StickmanTextureFinal
-    second: {fileID: 2800000, guid: 41aecb53579c0eb4290797c99cc46914, type: 3}
+    second: {fileID: 2800000, guid: 4312a98358ea07d458d9752d043f460a, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
