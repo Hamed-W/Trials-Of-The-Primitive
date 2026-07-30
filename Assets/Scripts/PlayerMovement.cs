@@ -113,8 +113,6 @@ public class PlayerMovement : MonoBehaviour
 
         playerAnimScript.SetAnimState(finalAnimation);
 
-
-        Debug.Log(characterController.isGrounded);
     }
 
     void OnMove(InputValue value)
@@ -135,13 +133,11 @@ public class PlayerMovement : MonoBehaviour
         if (value.isPressed)
         {
             if (isSprinting) return;
-            Debug.Log("Start sprint");
             movementSpeed *= sprintMultiplier;
             isSprinting = true;
         }
         else
         {
-            Debug.Log("Stop sprint");
             movementSpeed /= sprintMultiplier;
             isSprinting = false;
         }
@@ -152,12 +148,12 @@ public class PlayerMovement : MonoBehaviour
         bool isThirdPerson = cameraManager.isThirdPerson;
 
         
-        if (cameraManager.isBlending)
+        if (cameraManager.IsBlending)
             return;
 
         // In third person mode we only rotate character when player intends to move.
         // In first person mode we always rotate character where player is looking.
-        if (isThirdPerson && !cameraManager.isLockedOn && moveInput.magnitude <= 0.01f)
+        if (isThirdPerson && !cameraManager.IsLockedOn && moveInput.magnitude <= 0.01f)
             return;
 
         float finalYaw = cameraManager.CalculateYaw(moveInput);

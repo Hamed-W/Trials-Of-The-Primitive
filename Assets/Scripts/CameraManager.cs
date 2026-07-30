@@ -22,13 +22,12 @@ public class CameraManager : MonoBehaviour
     public float sensitivity = 1f;
 
 
-
     [SerializeField] private Transform player;
     [SerializeField] private Transform mainCamera;
 
     [SerializeField] private CinemachineBrain cinemachineBrain;
 
-    public bool isBlending => cinemachineBrain != null && cinemachineBrain.IsBlending;
+    public bool IsBlending => cinemachineBrain != null && cinemachineBrain.IsBlending;
 
     public float yawToRotate = 0;
 
@@ -43,7 +42,7 @@ public class CameraManager : MonoBehaviour
 
     private Transform lockedTarget;
 
-    public bool isLockedOn => lockedTarget != null;
+    public bool IsLockedOn => lockedTarget != null;
 
     [SerializeField] private Transform testEnemy;
 
@@ -79,7 +78,7 @@ public class CameraManager : MonoBehaviour
 
         float targetYaw;
 
-        if (isLockedOn)
+        if (IsLockedOn)
         {
             Vector3 targetDirection = lockedTarget.position - player.position;
 
@@ -118,7 +117,7 @@ public class CameraManager : MonoBehaviour
         if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame) ToggleView();
         if (Keyboard.current != null && Keyboard.current[cameraLockKey].wasPressedThisFrame)
         {
-            if (isLockedOn)
+            if (IsLockedOn)
                 ToggleView();
             else
                 LockOntoTarget(testEnemy);
@@ -136,7 +135,7 @@ public class CameraManager : MonoBehaviour
         if (cinemachineBrain.IsBlending)
             return;
 
-        if (isLockedOn)
+        if (IsLockedOn)
         {
             lockedTarget = null;
             lockOnCamera.Priority = 5;
@@ -194,7 +193,7 @@ public class CameraManager : MonoBehaviour
         if (target == null)
             return;
 
-        if (isBlending)
+        if (IsBlending)
             return;
 
         lockedTarget = target;

@@ -1,4 +1,7 @@
 using UnityEngine;
+using Unity.AI.Navigation;
+
+
 public class MapGenerator : MonoBehaviour
 {
     public enum DrawMode {NoiseMap, Mesh}
@@ -55,8 +58,8 @@ public class MapGenerator : MonoBehaviour
 
 
     [Header("Biome Objects")]
-    public GameObject[] grassPrefabs;
-    public GameObject[] desertPrefabs;
+    public GameObject[] grassObjectPrefabs;
+    public GameObject[] desertObjectPrefabs;
 
     public int grassObjectCount = 200;
     public int desertObjectCount = 100;
@@ -66,9 +69,21 @@ public class MapGenerator : MonoBehaviour
     public LayerMask objectLayerMask;
     public float minimumObjectSpacing = 2f;
 
+    [Header("Animals")]
+    public GameObject[] grassAnimalPrefabs;
+    public GameObject[] desertAnimalPrefabs;
+
+    public int grassAnimalCount = 200;
+    public int desertAnimalCount = 100;
+
+    public LayerMask entityLayerMask;
+
+
     public LayerMask terrainLayerMask;
     
     public float maximumObjectSlope = 30f;
+
+    [SerializeField] private NavMeshSurface navMeshSurface;
 
 
     public void GenerateMap()
@@ -97,11 +112,24 @@ public class MapGenerator : MonoBehaviour
         
 
         MeshData meshData = MeshGenerator.GenerateTerrainMesh(finalHeightMap, levelOfDetail);
-        terrainMap = new TerrainMap(mapVertexSize, transform, terrainMaterial, meshData.CreateMesh(), biomeTexture);
+
+        Mesh generatedMesh = meshData.CreateMesh();
+
+        terrainMap = new TerrainMap(mapVertexSize, transform, terrainMaterial, generatedMesh, biomeTexture);
 
         Physics.SyncTransforms();
 
-        SpawnBiomeObjects(biomeMap,finalHeightMap,mapVertexSize);
+        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Biome Objects");
+
+        Physics.SyncTransforms();
+
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.RemoveData();
+            navMeshSurface.BuildNavMesh();
+        }
+
+        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Animals");
     }
 
     void OnValidate() {
@@ -110,19 +138,30 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    private void SpawnBiomeObjects(float[,] biomeMap, float[,] finalHeightMap, int mapVertexSize)
+    private void SpawnBiomeObjects(float[,] biomeMap, float[,] finalHeightMap, int mapVertexSize, string type)
     {
-        GameObject objectParent = new GameObject("Biome Objects");
+        GameObject objectParent = new GameObject(type);
 
         objectParent.transform.SetParent(transform);
         objectParent.transform.localPosition = Vector3.zero;
 
-        SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassPrefabs, grassObjectCount, 0f, 0.4f, objectParent.transform);
+        switch (type)
+        {
+            case "Biome Objects":
+                Debug.Log("Biome Objects");
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassObjectPrefabs, grassObjectCount, 0f, 0.4f, objectParent.transform, objectLayerMask);
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertObjectPrefabs, desertObjectCount, 0.6f, 1f, objectParent.transform, objectLayerMask);
+                break;
 
-        SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertPrefabs, desertObjectCount, 0.6f, 1f, objectParent.transform);
+            case "Animals":
+                Debug.Log("Animals");
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassAnimalPrefabs, grassAnimalCount, 0f, 0.4f, objectParent.transform, entityLayerMask);
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertAnimalPrefabs, desertAnimalCount, 0.6f, 1f, objectParent.transform, entityLayerMask);
+                break;
+        }
     }
 
-    private void SpawnObjectsForBiome(float[,] biomeMap,float[,] heightMap,int mapVertexSize,GameObject[] prefabs,int objectCount,float minimumBiomeValue,float maximumBiomeValue,Transform parent)
+    private void SpawnObjectsForBiome(float[,] biomeMap,float[,] heightMap,int mapVertexSize,GameObject[] prefabs,int objectCount,float minimumBiomeValue,float maximumBiomeValue,Transform parent, LayerMask layerMask)
     {
         if (prefabs == null || prefabs.Length == 0)
             return;
@@ -186,7 +225,7 @@ public class MapGenerator : MonoBehaviour
             if (slope > maximumObjectSlope)
                 continue;
 
-            if (Physics.CheckSphere(position, minimumObjectSpacing, objectLayerMask))
+            if (Physics.CheckSphere(position, minimumObjectSpacing, layerMask))
             {
                 continue;
             }
