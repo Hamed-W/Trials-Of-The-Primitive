@@ -9,7 +9,6 @@ public abstract class EntityBehaviour : MonoBehaviour
     [SerializeField] protected Animator animator;
 
     [SerializeField] protected float detectionRange = 12f;
-    [SerializeField] protected float attackRange = 2f;
     [SerializeField] protected float idleDuration = 3f;
 
     [SerializeField] protected float roamingRadius = 10f;
@@ -20,9 +19,7 @@ public abstract class EntityBehaviour : MonoBehaviour
     [SerializeField] protected float maximumDistanceFromSpawn = 25f;
     [SerializeField] protected float returnStoppingDistance = 1.5f;
 
-    [SerializeField] protected float attackCooldownDuration = 2f;
     protected float attackCooldownTimer;
-    protected bool attackAnimationFinished = true;
 
     protected Transform target;
     protected EntityState currentState;
@@ -133,67 +130,14 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     protected virtual void UpdateChasing()
     {
-        if (target == null)
-        {
-            ChangeState(EntityState.Idle);
-            return;
-        }
-
-        float distance = Vector3.Distance(transform.position, target.position);
-
-        if (distance <= attackRange)
-        {
-            ChangeState(EntityState.Attacking);
-            return;
-        }
-
-        agent.SetDestination(target.position);
     }
 
     protected virtual void UpdateAttacking()
     {
-        if (target == null)
-        {
-            if (attackAnimationFinished)
-                ChangeState(EntityState.Idle);
-
-            return;
-        }
-
-        FaceTarget();
-
-        float distance = Vector3.Distance(transform.position, target.position);
-
-        Debug.Log(attackAnimationFinished + "Attack animation finished");
-        if (!attackAnimationFinished) return;
-
-        if (distance > attackRange)
-        {
-            Debug.Log($"Leaving attack range: {distance}");
-            ChangeState(EntityState.Chasing);
-            return;
-        }
-
-        if (attackCooldownTimer <= 0f)
-        {
-            Debug.Log("Starting follow-up attack");
-            StartAttack();
-        }
     }
 
     protected virtual void UpdateFleeing()
     {
-        if (target == null)
-        {
-            ChangeState(EntityState.Idle);
-            return;
-        }
-
-        Vector3 awayFromTarget = (transform.position - target.position).normalized;
-
-        Vector3 destination = transform.position + awayFromTarget * roamingRadius;
-
-        agent.SetDestination(destination);
     }
 
     protected virtual void UpdateReturning()
@@ -283,19 +227,6 @@ public abstract class EntityBehaviour : MonoBehaviour
         animator.SetBool(Animator.StringToHash("Idle"), false);
     }
 
-    protected virtual void StartAttack()
-    {
-        Debug.Log("Set to false!");
-        attackAnimationFinished = false;
-        //attackCooldownTimer = attackCooldownDuration;
-
-        PrepareAttack();
-        animator.SetTrigger(Animator.StringToHash("Attack"));
-    }
-
-    protected virtual void PrepareAttack()
-    {
-    }
 
     protected virtual void SetRandomRoamingDestination()
     {
@@ -346,13 +277,6 @@ public abstract class EntityBehaviour : MonoBehaviour
     public virtual void Die()
     {
         ChangeState(EntityState.Dead);
-    }
-
-    public void OnAttackAnimationFinished()
-    {
-        Debug.Log("Event called");
-        attackAnimationFinished = true;
-        attackCooldownTimer = attackCooldownDuration;
     }
 
 }

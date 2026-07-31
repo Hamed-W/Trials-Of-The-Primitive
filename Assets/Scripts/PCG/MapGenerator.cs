@@ -69,12 +69,12 @@ public class MapGenerator : MonoBehaviour
     public LayerMask objectLayerMask;
     public float minimumObjectSpacing = 2f;
 
-    [Header("Animals")]
-    public GameObject[] grassAnimalPrefabs;
-    public GameObject[] desertAnimalPrefabs;
+    [Header("Entities")]
+    public GameObject[] grassEntityPrefabs;
+    public GameObject[] desertEntityPrefabs;
 
-    public int grassAnimalCount = 200;
-    public int desertAnimalCount = 100;
+    public int grassEntityCount = 200;
+    public int desertEntityCount = 100;
 
     public LayerMask entityLayerMask;
 
@@ -129,7 +129,7 @@ public class MapGenerator : MonoBehaviour
             navMeshSurface.BuildNavMesh();
         }
 
-        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Animals");
+        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Entities");
     }
 
     void OnValidate() {
@@ -153,10 +153,10 @@ public class MapGenerator : MonoBehaviour
                 SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertObjectPrefabs, desertObjectCount, 0.6f, 1f, objectParent.transform, objectLayerMask);
                 break;
 
-            case "Animals":
-                Debug.Log("Animals");
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassAnimalPrefabs, grassAnimalCount, 0f, 0.4f, objectParent.transform, entityLayerMask);
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertAnimalPrefabs, desertAnimalCount, 0.6f, 1f, objectParent.transform, entityLayerMask);
+            case "Entities":
+                Debug.Log("Entities");
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassEntityPrefabs, grassEntityCount, 0f, 0.4f, objectParent.transform, entityLayerMask);
+                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertEntityPrefabs, desertEntityCount    , 0.6f, 1f, objectParent.transform, entityLayerMask);
                 break;
         }
     }

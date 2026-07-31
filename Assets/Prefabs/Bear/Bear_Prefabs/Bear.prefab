@@ -1038,8 +1038,10 @@ MonoBehaviour:
   turnSpeed: 360
   maximumDistanceFromSpawn: 25
   returnStoppingDistance: 1.5
+  attackCooldownDuration: 2
   damage: 25
   attackType: 0
+  numberOfAttackTypes: 3
 --- !u!64 &8434723858477855353
 MeshCollider:
   m_ObjectHideFlags: 0
