@@ -17,6 +17,10 @@ public class AggressiveEntityBehaviour : EntityBehaviour
 
     [SerializeField] protected float attackRange = 2f;
 
+    [SerializeField] protected List<AttackData> attackData;
+
+    public bool playerAttacked = false;
+
 
 
     protected override EntityState GetTargetReactionState()
@@ -57,13 +61,11 @@ public class AggressiveEntityBehaviour : EntityBehaviour
 
         float distance = Vector3.Distance(transform.position, target.position);
 
-        Debug.Log(attackAnimationFinished + "Attack animation finished");
         if (!attackAnimationFinished) return;
 
         if (distance > attackRange)
         {
             animator.SetBool("Idle", false);
-            Debug.Log($"Leaving attack range: {distance}");
             ChangeState(EntityState.Chasing);
             return;
         }
@@ -74,13 +76,11 @@ public class AggressiveEntityBehaviour : EntityBehaviour
 
         if (attackCooldownTimer <= 0f)
         {
-            Debug.Log("Starting follow-up attack");
             StartAttack();
         }
     }
     private void StartAttack()
     {
-        Debug.Log("Set to false!");
         attackAnimationFinished = false;
         //attackCooldownTimer = attackCooldownDuration;
 
@@ -92,16 +92,39 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     {
         attackType = Random.Range(0, numberOfAttackTypes);
         animator.SetInteger(Animator.StringToHash("Attack Type"), attackType);
-
-        Debug.Log($"Selected attack type: {attackType}");
     }
 
 
     public void OnAttackAnimationFinished()
     {
-        Debug.Log("Event called");
         attackAnimationFinished = true;
         attackCooldownTimer = attackCooldownDuration;
+    }
+    
+    public void OnAttackWindowEntry()
+    {
+        for (int i = 0; i < attackData[attackType].colliders.Length; i++)
+        {
+            attackData[attackType].colliders[i].ActivateCollider();
+        }
+        playerAttacked = false;
+    }
+
+    public void OnAttackWindowExit()
+    {
+        for (int i = 0; i < attackData[attackType].colliders.Length; i++)
+        {
+            attackData[attackType].colliders[i].DeactivateCollider();
+        }
+    }
+
+    public void OnAttackHit(GameObject player)
+    {
+        if (playerAttacked == false)
+        {
+            Debug.Log($"Player took {damage} damage from {this.name}");
+            playerAttacked = true;
+        }
     }
 
     /*
@@ -118,4 +141,13 @@ public class AggressiveEntityBehaviour : EntityBehaviour
         // Replace with health functionality
         // target.GetComponent<HealthScript>()?.TakeDamage(damage); or something like this
     }*/
+}
+
+[System.Serializable]
+public class AttackData
+{
+    //public float damage;
+    //public float range;
+    //public float cooldown;
+    public AttackColliderHandler[] colliders;
 }

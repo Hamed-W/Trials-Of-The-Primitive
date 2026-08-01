@@ -15,7 +15,7 @@ ModelImporter:
     second: Bear_tpose
   - first:
       74: -6528749351906173395
-    second: Bear_Attack5
+    second: Bear_Attack4
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -73,7 +73,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Bear_Attack5
+      name: Bear_Attack4
       takeName: Bear_Attack5
       internalID: -6528749351906173395
       firstFrame: 2
@@ -97,6 +97,20 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0
+        functionName: OnAttackWindowEntry
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.988549
+        functionName: OnAttackWindowExit
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 1
         functionName: OnAttackAnimationFinished
         data: 
