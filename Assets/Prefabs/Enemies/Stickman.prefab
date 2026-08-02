@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 8994388837128983271}
   - component: {fileID: -6743676799962536500}
   - component: {fileID: 5729808995039682277}
+  - component: {fileID: -1773335351637634728}
   m_Layer: 0
   m_Name: Stickman
   m_TagString: Untagged
@@ -220,18 +221,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 8994388837128983271}
   animator: {fileID: 142777366529400606}
+  model: {fileID: 1685923167190714503}
   detectionRange: 12
   idleDuration: 3
+  baseRoamingRadius: 10
+  baseRoamingSpeed: 1.5
+  baseRunningSpeed: 3.5
+  baseTurnSpeed: 360
   roamingRadius: 10
   roamingSpeed: 1.5
   runningSpeed: 3.5
   turnSpeed: 360
   maximumDistanceFromSpawn: 25
   returnStoppingDistance: 1.5
-  damage: 25
+  entityStats: {fileID: -1773335351637634728}
   attackType: 0
   numberOfAttackTypes: 1
   attackCooldownDuration: 2
+  baseAttackRange: 2
   attackRange: 1.5
   attackData:
   - colliders:
@@ -260,6 +267,32 @@ CapsuleCollider:
   m_Height: 1.6715053
   m_Direction: 1
   m_Center: {x: -0.20082565, y: 0.9130263, z: 0}
+--- !u!114 &-1773335351637634728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600983938827891759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a4abae311779048b3ea96c812d4a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level: 1
+  baseMaxHealth: 100
+  baseDamage: 20
+  baseSize: 1
+  baseMovementSpeed: 1
+  healthGrowth: 10
+  damageGrowth: 4
+  sizeGrowth: 0.02
+  speedGrowth: 0.1
+  maxHealth: 0
+  damage: 0
+  size: 0
+  movementSpeed: 0
+  currentHealth: 0
 --- !u!1 &657464548753722256
 GameObject:
   m_ObjectHideFlags: 0

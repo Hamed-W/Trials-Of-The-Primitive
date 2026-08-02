@@ -4,24 +4,30 @@ using UnityEngine;
 
 public class AggressiveEntityBehaviour : EntityBehaviour
 {
-    [SerializeField] private float damage = 25f;
+    [SerializeField] protected int attackType = 0;
 
-    [SerializeField] private int attackType = 0;
-
-    [SerializeField] private int numberOfAttackTypes = 1;
+    [SerializeField] protected int numberOfAttackTypes = 1;
 
 
     [SerializeField] protected float attackCooldownDuration = 2f;
 
     protected bool attackAnimationFinished = true;
 
-    [SerializeField] protected float attackRange = 2f;
+    [SerializeField] protected float baseAttackRange = 2f;
+
+    [SerializeField] protected float attackRange;
 
     [SerializeField] protected List<AttackData> attackData;
+
 
     public bool playerAttacked = false;
 
 
+    public override void SetLevel(int level)
+    {
+        base.SetLevel(level);
+        attackRange = baseAttackRange * entityStats.size;
+    }
 
     protected override EntityState GetTargetReactionState()
     {
@@ -122,7 +128,7 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     {
         if (playerAttacked == false)
         {
-            Debug.Log($"Player took {damage} damage from {this.name}");
+            Debug.Log($"Player took {entityStats.damage} damage from {this.name}");
             playerAttacked = true;
         }
     }

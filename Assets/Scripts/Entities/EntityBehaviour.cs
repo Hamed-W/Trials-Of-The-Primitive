@@ -7,14 +7,27 @@ public abstract class EntityBehaviour : MonoBehaviour
 {
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected Transform model;
 
     [SerializeField] protected float detectionRange = 12f;
     [SerializeField] protected float idleDuration = 3f;
+    
+    [SerializeField] protected float baseRoamingRadius = 10f;
+    [SerializeField] protected float baseRoamingSpeed = 1.5f;
+    [SerializeField] protected float baseRunningSpeed = 3.5f;
+    [SerializeField] protected float baseTurnSpeed = 360f;
 
-    [SerializeField] protected float roamingRadius = 10f;
-    [SerializeField] protected float roamingSpeed = 1.5f;
-    [SerializeField] protected float runningSpeed = 3.5f;
-    [SerializeField] protected float turnSpeed = 360f;
+    [SerializeField] protected float roamingRadius;
+    [SerializeField] protected float roamingSpeed;
+    [SerializeField] protected float runningSpeed;
+    [SerializeField] protected float turnSpeed;
+    private Vector3 originalModelScale;
+
+    /*
+    [SerializeField] protected float roamingRadius => entityStats.size * 10f;
+    [SerializeField] protected float roamingSpeed => entityStats.size * 1.5f;
+    [SerializeField] protected float runningSpeed => entityStats.movementSpeed * 3.5f;
+    [SerializeField] protected float turnSpeed => entityStats.movementSpeed * 360f;*/
 
     [SerializeField] protected float maximumDistanceFromSpawn = 25f;
     [SerializeField] protected float returnStoppingDistance = 1.5f;
@@ -27,18 +40,38 @@ public abstract class EntityBehaviour : MonoBehaviour
     private float timer;
     private Vector3 spawnPosition;
 
+    [SerializeField] protected EntityStats entityStats;
+
+
+
     protected virtual void Awake()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
 
+        originalModelScale = model.localScale;
+
         spawnPosition = transform.position;
     }
 
     protected virtual void Start()
     {
+        //model.localScale *= entityStats.size;
+
+        //attackCooldownTimer /= attackspeed //For future implementation of attack speed, if needed
+        SetLevel(10);
         EnterState(EntityState.Idle);
+    }
+
+    public virtual void SetLevel(int level)
+    {
+        entityStats.SetLevel(level);
+        roamingRadius = entityStats.size * baseRoamingRadius;
+        roamingSpeed = entityStats.movementSpeed * baseRoamingSpeed;
+        runningSpeed = entityStats.movementSpeed * baseRunningSpeed;
+        turnSpeed = entityStats.movementSpeed * baseTurnSpeed;
+        model.localScale = originalModelScale * entityStats.size;
     }
 
     protected virtual void Update()

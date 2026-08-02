@@ -262,7 +262,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCollider: {fileID: 2173763063717504516}
-  attacked: 0
   behaviourScript: {fileID: 6281104382678025879}
 --- !u!1 &1529879033060973809
 GameObject:
@@ -534,6 +533,7 @@ GameObject:
   - component: {fileID: -2162179558744413752}
   - component: {fileID: 6281104382678025879}
   - component: {fileID: 176655938477611326}
+  - component: {fileID: 2628800384247232205}
   m_Layer: 0
   m_Name: Sunflower
   m_TagString: Untagged
@@ -615,23 +615,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: -2162179558744413752}
   animator: {fileID: 7298704595871165775}
+  model: {fileID: 7150476200114370101}
   detectionRange: 12
   idleDuration: 3
+  baseRoamingRadius: 10
+  baseRoamingSpeed: 1.5
+  baseRunningSpeed: 3.5
+  baseTurnSpeed: 360
   roamingRadius: 10
   roamingSpeed: 1.5
   runningSpeed: 3.5
   turnSpeed: 360
   maximumDistanceFromSpawn: 25
   returnStoppingDistance: 1.5
-  damage: 25
+  entityStats: {fileID: 2628800384247232205}
   attackType: 0
   numberOfAttackTypes: 1
   attackCooldownDuration: 2
+  baseAttackRange: 2
   attackRange: 2
   attackData:
   - colliders:
     - {fileID: 2084865156301665633}
     - {fileID: 2439452316758660157}
+  playerAttacked: 0
 --- !u!65 &176655938477611326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -653,6 +660,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7538844, y: 2.077356, z: 0.683434}
   m_Center: {x: -0.039639324, y: 1.1612612, z: 0.089252114}
+--- !u!114 &2628800384247232205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4618063208708194105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a4abae311779048b3ea96c812d4a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  level: 1
+  baseMaxHealth: 150
+  baseDamage: 15
+  baseSize: 1
+  baseMovementSpeed: 0.6
+  healthGrowth: 15
+  damageGrowth: 2
+  sizeGrowth: 0.2
+  speedGrowth: 0.05
+  maxHealth: 0
+  damage: 0
+  size: 0
+  movementSpeed: 0
+  currentHealth: 0
 --- !u!1 &4843397819492533013
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,5 +1206,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCollider: {fileID: 4897060893250525713}
-  attacked: 0
   behaviourScript: {fileID: 6281104382678025879}
