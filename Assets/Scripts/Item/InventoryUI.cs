@@ -59,7 +59,6 @@ public class InventoryUI : MonoBehaviour
             }
             catch (System.ArgumentOutOfRangeException)
             {
-                Debug.Log(i);
                 slots[i].ClearSlot();
             }
         }

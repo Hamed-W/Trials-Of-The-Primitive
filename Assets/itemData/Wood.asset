@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: Wood
   icon: {fileID: 21300000, guid: 6054318fc678eef4e97655493b73c580, type: 3}
   description: A piece of wood
-  stackable: 1
+  stackable: 0
   maximumStackSize: 99
-  worldPrefab: {fileID: 8722086538339903832, guid: cb8c263cf56ac234d8fdfab6c45b30fb, type: 3}
+  worldPrefab: {fileID: 555413158624911266, guid: 53d6874befcb7f04e9c21ad75d79db2c, type: 3}

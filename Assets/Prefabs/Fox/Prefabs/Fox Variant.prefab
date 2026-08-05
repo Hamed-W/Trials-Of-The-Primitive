@@ -84,6 +84,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4020983980232809014, guid: 9fedecbd1aa68924b816f15cb97e611a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7739387864789194951}
+    - targetCorrespondingSourceObject: {fileID: 4020983980232809014, guid: 9fedecbd1aa68924b816f15cb97e611a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4415112464796116877}
   m_SourcePrefab: {fileID: 100100000, guid: 9fedecbd1aa68924b816f15cb97e611a, type: 3}
 --- !u!95 &1583857170285379787 stripped
 Animator:
@@ -194,6 +197,24 @@ MonoBehaviour:
   size: 0
   movementSpeed: 0
   currentHealth: 0
+--- !u!114 &4415112464796116877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5210948221510959115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761c9921333f1034fa0d5ae4d5e9e0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleDrops:
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    dropChance: 1
+    minimumQuantity: 1
+    maximumQuantity: 10
+  spawnPoint: {fileID: 0}
 --- !u!4 &6721989231024017099 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2509960724373918966, guid: 9fedecbd1aa68924b816f15cb97e611a, type: 3}

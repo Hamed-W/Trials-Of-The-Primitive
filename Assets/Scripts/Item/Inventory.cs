@@ -10,8 +10,9 @@ public class Inventory : MonoBehaviour
 
     public event Action InventoryChanged;
 
-    public bool AddItem(ItemData itemData, int quantity = 1)
+    public int AddItem(ItemData itemData, int quantity = 1)
     {
+        int startQuantity = quantity;
         if (itemData.stackable) // This fills any existing item stacks first, before creating new stacks.
         {
             foreach (Item item in items)
@@ -23,7 +24,7 @@ public class Inventory : MonoBehaviour
                 if (quantity <= 0) // Exits early if the entire quantity has been added to existing stacks.
                 {
                     InventoryChanged?.Invoke();
-                    return true;
+                    return quantity;
                 }
             }
         }
@@ -40,9 +41,9 @@ public class Inventory : MonoBehaviour
             quantity -= stackQuantity;
         }
 
-        InventoryChanged?.Invoke();
+        if (startQuantity > quantity) InventoryChanged?.Invoke();
 
-        return quantity <= 0;
+        return quantity;
     }
 
     public bool RemoveItem(ItemData itemData, int quantity = 1)

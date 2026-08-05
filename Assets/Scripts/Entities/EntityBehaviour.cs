@@ -309,6 +309,7 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     public virtual void Die()
     {
+        GetComponent<ItemDropper>()?.DropItems();
         ChangeState(EntityState.Dead);
     }
 

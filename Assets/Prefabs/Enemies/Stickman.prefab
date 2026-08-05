@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: -6743676799962536500}
   - component: {fileID: 5729808995039682277}
   - component: {fileID: -1773335351637634728}
+  - component: {fileID: -2867165191791522293}
   m_Layer: 0
   m_Name: Stickman
   m_TagString: Untagged
@@ -293,6 +294,24 @@ MonoBehaviour:
   size: 0
   movementSpeed: 0
   currentHealth: 0
+--- !u!114 &-2867165191791522293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600983938827891759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761c9921333f1034fa0d5ae4d5e9e0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleDrops:
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    dropChance: 1
+    minimumQuantity: 1
+    maximumQuantity: 10
+  spawnPoint: {fileID: 0}
 --- !u!1 &657464548753722256
 GameObject:
   m_ObjectHideFlags: 0
