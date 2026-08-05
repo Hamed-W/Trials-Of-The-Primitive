@@ -9,6 +9,7 @@ public class InventorySlot : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text quantityText;
+    [SerializeField] private Sprite slotSprite;
 
     private Item item;
 
@@ -24,8 +25,7 @@ public class InventorySlot : MonoBehaviour
     public void ClearSlot()
     {
         item = null;
-        itemIcon.sprite = null;
-        itemIcon.enabled = false;
+        itemIcon.sprite = slotSprite;
         quantityText.text = string.Empty;
     }
 }

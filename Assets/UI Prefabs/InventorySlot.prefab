@@ -272,6 +272,7 @@ MonoBehaviour:
   itemIcon: {fileID: 4367717432703669584}
   nameText: {fileID: 2543504114828320709}
   quantityText: {fileID: 5979785619512204897}
+  slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &6480636596031512324
 GameObject:
   m_ObjectHideFlags: 0
