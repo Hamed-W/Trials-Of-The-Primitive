@@ -54,8 +54,8 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()    
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        /*Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;*/
         pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
         
         ApplySensitivity();
@@ -106,12 +106,13 @@ public class CameraManager : MonoBehaviour
 
     void CheckInputs()
     {
+        /*
         // Cursor lock
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
+        }*/
 
         // Camera toggle
         if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame) ToggleView();

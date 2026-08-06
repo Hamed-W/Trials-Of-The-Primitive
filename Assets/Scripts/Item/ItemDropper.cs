@@ -16,18 +16,26 @@ public class ItemDropper : MonoBehaviour
                 continue;
 
             int quantity = Random.Range(drop.minimumQuantity, drop.maximumQuantity + 1); // +1 to make it inclusive.
-            for (int i = 0; i < quantity; i++)
+            while (quantity > 0)
             {
-                SpawnItem(drop.itemData, spawnPosition);
+                if (quantity > drop.itemData.maximumStackSize)
+                    quantity = drop.itemData.maximumStackSize;
+                SpawnItem(drop.itemData, spawnPosition, quantity);
+                quantity -= drop.itemData.maximumStackSize;
             }
         }
     }
 
-    private void SpawnItem(ItemData itemData, Vector3 spawnPosition)
+    private void SpawnItem(ItemData itemData, Vector3 spawnPosition, int quantity)
     {
         GameObject droppedItem = Instantiate(itemData.worldPrefab, spawnPosition, Random.rotation);
+
+        PickUpItem pickUpItem = droppedItem.GetComponent<PickUpItem>();
+        pickUpItem.SetQuantity(quantity);
+
         Rigidbody rb = droppedItem.GetComponent<Rigidbody>();
-        Vector3 direction =Vector3.up + Random.insideUnitSphere * 0.5f;
+
+        Vector3 direction = Vector3.up + Random.insideUnitSphere * 0.5f;
         rb.AddForce(direction.normalized * 3f, ForceMode.Impulse);
     }
 }

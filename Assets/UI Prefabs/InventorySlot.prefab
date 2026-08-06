@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 4367717432703669584}
   - component: {fileID: 6256794318943445493}
   - component: {fileID: 3698296093406363270}
+  - component: {fileID: 7025333616403955673}
   m_Layer: 5
   m_Name: InventorySlot
   m_TagString: Untagged
@@ -273,6 +274,20 @@ MonoBehaviour:
   nameText: {fileID: 2543504114828320709}
   quantityText: {fileID: 5979785619512204897}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 1
+  canvasGroup: {fileID: 7025333616403955673}
+--- !u!225 &7025333616403955673
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5792692491479887791}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6480636596031512324
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

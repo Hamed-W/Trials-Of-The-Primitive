@@ -579,6 +579,8 @@ MonoBehaviour:
   nameText: {fileID: 2809432052499674147}
   quantityText: {fileID: 7348482915872595777}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 2754450089861190298}
 --- !u!114 &2754450089861190298
 MonoBehaviour:
@@ -1113,6 +1115,8 @@ MonoBehaviour:
   nameText: {fileID: 7129728842563001877}
   quantityText: {fileID: 335000668905932980}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 5002837433330830368}
 --- !u!114 &5002837433330830368
 MonoBehaviour:
@@ -1474,6 +1478,8 @@ MonoBehaviour:
   nameText: {fileID: 6410397184610975445}
   quantityText: {fileID: 9171507017645559311}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 2569495653951595415}
 --- !u!114 &2569495653951595415
 MonoBehaviour:
@@ -2033,6 +2039,8 @@ MonoBehaviour:
   nameText: {fileID: 5954905689013684515}
   quantityText: {fileID: 5931313982599203087}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 5004177260261636667}
 --- !u!114 &5004177260261636667
 MonoBehaviour:
@@ -2698,6 +2706,8 @@ MonoBehaviour:
   nameText: {fileID: 5783666939638971437}
   quantityText: {fileID: 1488730419816959928}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 5784623608937067047}
 --- !u!114 &5784623608937067047
 MonoBehaviour:
@@ -3249,6 +3259,8 @@ MonoBehaviour:
   nameText: {fileID: 5505455012255736929}
   quantityText: {fileID: 9059802538896245852}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 8811959825290990392}
 --- !u!114 &8811959825290990392
 MonoBehaviour:
@@ -3406,6 +3418,8 @@ MonoBehaviour:
   nameText: {fileID: 7430044162217959134}
   quantityText: {fileID: 7486406974079274410}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 6539964902348656356}
 --- !u!114 &6539964902348656356
 MonoBehaviour:
@@ -3563,6 +3577,8 @@ MonoBehaviour:
   nameText: {fileID: 8361526278740666280}
   quantityText: {fileID: 4223998550248581707}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 3707559630425200711}
 --- !u!114 &3707559630425200711
 MonoBehaviour:
@@ -4798,6 +4814,8 @@ MonoBehaviour:
   nameText: {fileID: 297242820819118848}
   quantityText: {fileID: 948761808883422805}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 824456632122857350}
 --- !u!114 &824456632122857350
 MonoBehaviour:
@@ -6003,6 +6021,8 @@ MonoBehaviour:
   nameText: {fileID: 73471585616322297}
   quantityText: {fileID: 3661477385824839292}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  draggable: 0
+  canvasGroup: {fileID: 0}
   selectedOutline: {fileID: 8843317629482092947}
 --- !u!114 &8843317629482092947
 MonoBehaviour:
@@ -6514,6 +6534,7 @@ MonoBehaviour:
   inventory: {fileID: 0}
   content: {fileID: 2300041530187959942}
   slotPrefab: {fileID: 3698296093406363270, guid: b2c727f5df8839348ade983d2ca0620b, type: 3}
+  rootCanvas: {fileID: 7089700978635292929}
 --- !u!1 &8399077028730016200
 GameObject:
   m_ObjectHideFlags: 0

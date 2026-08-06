@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,8 +18,12 @@ public class HotbarUI : MonoBehaviour
     private void OnEnable()
     {
         inventory.InventoryChanged += Refresh;
+    }
+    private void Start()
+    {
         Refresh();
     }
+
 
     private void OnDisable()
     {
@@ -29,15 +34,12 @@ public class HotbarUI : MonoBehaviour
     {
         for (int i = 0; i < hotbarSize; i++)
         {
-            try
-            {
-                Item item = inventory.items[i];
+            Item item = inventory.items[i];
+
+            if (item != null)
                 slots[i].SetItemSlot(item);
-            }
-            catch (System.ArgumentOutOfRangeException)
-            {
+            else
                 slots[i].ClearSlot();
-            }
         }
     }
 

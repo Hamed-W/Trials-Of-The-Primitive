@@ -10,7 +10,8 @@ public class UIHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -22,5 +23,7 @@ public class UIHandler : MonoBehaviour
     void OnOpenInventory()
     {
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        Cursor.lockState = inventoryPanel.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = inventoryPanel.activeSelf;
     }
 }

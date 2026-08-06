@@ -7,6 +7,11 @@ public class PickUpItem : MonoBehaviour
     [SerializeField] private ItemData itemData;
     [SerializeField] private int quantity = 1;
 
+    public void SetQuantity(int quantity)
+    {
+        this.quantity = quantity;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
