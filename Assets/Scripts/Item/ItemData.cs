@@ -10,8 +10,36 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public string description;
 
-    public bool stackable = true;
     public int maximumStackSize = 99;
 
     public GameObject worldPrefab;
+
+    public ItemUseType itemUseType;
+    public ItemUseEffect useEffect;
+
+    [Header("Equipment")]
+    public bool equippable;
+    public EquipmentAttachment attachment;
+    public GameObject equippedPrefab;
+}
+
+public enum EquipmentAttachment
+{
+    None,
+    RightHand,
+    LeftHand,
+    Head,
+    Back,
+    Chest
+}
+
+public enum ItemUseType
+{
+    None,
+    Swing,
+    Use,
+    Consume,
+    Shield,
+    Helmet,
+    Armor
 }

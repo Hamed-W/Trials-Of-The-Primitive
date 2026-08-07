@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 3687890041820593857}
   m_Layer: 6
   m_Name: TempGrassSpawnObject
-  m_TagString: Untagged
+  m_TagString: Mineable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

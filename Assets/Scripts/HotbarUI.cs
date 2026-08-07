@@ -57,10 +57,11 @@ public class HotbarUI : MonoBehaviour
         if (selectedIndex == index)
         {
             selectedIndex = -1;
+            inventory.SetItemHeld(null);
             return;
         }
         selectedIndex = index;
-        //try selectedItem = inventory.items[index];
+        inventory.SetItemHeld(inventory.items[index]);
         slots[index].SetSelected(true);
         Debug.Log($"Selected {index + 1}");
     }

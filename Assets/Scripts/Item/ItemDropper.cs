@@ -18,10 +18,9 @@ public class ItemDropper : MonoBehaviour
             int quantity = Random.Range(drop.minimumQuantity, drop.maximumQuantity + 1); // +1 to make it inclusive.
             while (quantity > 0)
             {
-                if (quantity > drop.itemData.maximumStackSize)
-                    quantity = drop.itemData.maximumStackSize;
-                SpawnItem(drop.itemData, spawnPosition, quantity);
-                quantity -= drop.itemData.maximumStackSize;
+                int spawnQuantity = Mathf.Min(quantity, drop.itemData.maximumStackSize);
+                SpawnItem(drop.itemData, spawnPosition, spawnQuantity);
+                quantity -= spawnQuantity;
             }
         }
     }

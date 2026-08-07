@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler
 {
     [SerializeField] private Image itemIcon;
     [SerializeField] private TMP_Text nameText;
@@ -136,5 +136,19 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         Destroy(draggedIcon.gameObject);
         draggedIcon = null;
+    }
+
+    public void OnPointerClick(PointerEventData data)
+    {
+        if (data.button != PointerEventData.InputButton.Right) return;
+
+        Item clickedItem = inventory.items[slotIndex];
+
+        if (clickedItem == null || clickedItem.itemData == null)
+        {
+            return;
+        }
+
+        if (clickedItem.itemData.equippable) inventory.EquipItem(clickedItem);
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEditor.Progress;
 
 public class Inventory : MonoBehaviour
 {
@@ -9,10 +11,26 @@ public class Inventory : MonoBehaviour
     public List<Item> items = new List<Item>(); //Use ArrayList because if capacity changes we can use Add() and Remove() to change the size of the list. If we used an array, we would have to create a new array and copy the items over every time the capacity changes.
 
     public List<Item> equippedItems = new List<Item>();
+    public Item itemHeld = null; //Separate from equippedItems because you can hold an item in your hand without equipping it, and you can equip an item without holding it in your hand.
+    private GameObject heldItemObject;
+
+    [SerializeField] private List<BoneAttachmentEntry> boneAttachments = new List<BoneAttachmentEntry>();
+
+    [Serializable]
+    public class BoneAttachmentEntry
+    {
+        public EquipmentAttachment attachment;
+        public Transform attachmentPoint;
+    }
 
     public event Action InventoryChanged;
 
     [SerializeField] private Transform itemDropPoint;
+
+    [SerializeField] private GameObject player;
+
+    [SerializeField] private ItemUseController itemUseController;
+
 
 
     private void Awake()
@@ -48,8 +66,9 @@ public class Inventory : MonoBehaviour
     public int AddItem(ItemData itemData, int quantity = 1)
     {
         int startQuantity = quantity;
-        if (itemData.stackable) // This fills any existing item stacks first, before creating new stacks.
+        if (itemData.maximumStackSize > 1) // This fills any existing item stacks first, before creating new stacks.
         {
+            Debug.Log("1");
             foreach (Item item in items)
             {
                 if (item.itemData != itemData) continue;
@@ -64,15 +83,16 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        Debug.Log("2");
         // New stack creation if the old stack didn't fill the entire quantity.
         while (quantity > 0)
         {
-            int emptyIndex = items.FindIndex(item => item == null); // Finds the first empty slot in the inventory.
+            int emptyIndex = items.FindIndex(item => item == null || item.itemData == null); // Finds the first empty slot in the inventory.
             if (emptyIndex == -1) break;
 
-            int stackQuantity = itemData.stackable?
-                Mathf.Min(quantity, itemData.maximumStackSize)
-                : 1;
+            Debug.Log("3");
+
+            int stackQuantity = Mathf.Min(quantity, itemData.maximumStackSize);
 
             items[emptyIndex] = new Item(itemData, stackQuantity);
 
@@ -81,10 +101,11 @@ public class Inventory : MonoBehaviour
 
         if (startQuantity > quantity) InventoryChanged?.Invoke();
 
+        Debug.Log("QUANTITY" + quantity.ToString());
         return quantity;
     }
 
-    public bool RemoveItem(ItemData itemData, int quantity = 1)
+    public bool RemoveItemQuantity(ItemData itemData, int quantity = 1)
     {
         int availableQuantity = GetItemQuantity(itemData);
         if (availableQuantity < quantity) return false;
@@ -123,6 +144,10 @@ public class Inventory : MonoBehaviour
     {
         Item removedItem = items[index];
         if (removedItem == null) return null;
+
+        if (equippedItems.Contains(removedItem) && GetItemQuantity(removedItem.itemData) <= 0)
+            UnequipItem(removedItem);
+
         items[index] = null;
 
         InventoryChanged?.Invoke();
@@ -138,6 +163,8 @@ public class Inventory : MonoBehaviour
         Item item = items[index];
         if (item == null || item.itemData == null || item.itemData.worldPrefab == null) return false;
 
+        if (equippedItems.Contains(item)) UnequipItem(item);
+
         GameObject droppedObject = Instantiate(item.itemData.worldPrefab, spawnPosition, spawnRotation);
 
         PickUpItem pickup = droppedObject.GetComponent<PickUpItem>();
@@ -147,4 +174,125 @@ public class Inventory : MonoBehaviour
         InventoryChanged?.Invoke();
         return true;
     }
+
+    public void EquipItem(Item item)
+    {
+        if (item == null || item.itemData == null || item.itemData.attachment == EquipmentAttachment.None) return;
+        if (!ValidateEquipment(item)) return;
+        equippedItems.Add(item);
+        Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
+        GameObject equippedObject = Instantiate(item.itemData.equippedPrefab, attachmentPoint);
+        Debug.Log("Instantiated object");
+        InventoryChanged?.Invoke();
+    }
+
+    private bool ValidateEquipment(Item itemToEquip)
+    {
+        ItemUseType itemUseType = itemToEquip.itemData.itemUseType;
+
+        if (itemUseType == ItemUseType.Shield || itemUseType == ItemUseType.Helmet || itemUseType == ItemUseType.Armor)
+        {
+            Item equippedItem = equippedItems.Find(e => e.itemData.itemUseType == itemUseType);
+            if (equippedItem != null)
+            {
+                if (itemUseType == ItemUseType.Shield) itemUseController.StopBlocking();
+                UnequipItem(equippedItem);
+                if (equippedItem.itemData != itemToEquip.itemData) return true;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void UnequipItem(Item item)
+    {
+        Debug.Log("Unequipping item: " + item.itemData.itemName);
+        equippedItems.Remove(item);
+        Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
+        foreach (Transform child in attachmentPoint)
+        {
+            Debug.Log(child.name);
+            Debug.Log(item.itemData.equippedPrefab.name + "(Clone)");
+            if (child.name.Equals(item.itemData.equippedPrefab.name + "(Clone)"))
+            {
+                Debug.Log("Destroying equipped item");
+                Destroy(child.gameObject);
+                break;
+            }
+        }
+        InventoryChanged?.Invoke();
+    }
+
+    public void OnUseItem(InputValue value)
+    {
+        if (itemHeld == null || itemHeld.itemData == null) return;
+
+        if (itemHeld.itemData.equippable)
+        {
+            EquipItem(itemHeld);
+            return;
+        }
+        else
+        {
+            if (itemHeld.itemData.itemUseType == ItemUseType.Use || itemHeld.itemData.itemUseType == ItemUseType.Consume)
+            {
+                Debug.Log($"Using item: {itemHeld.itemData.itemName}");
+                bool used = (itemHeld.itemData.itemUseType == ItemUseType.Consume) ? itemUseController.UseConsumableItem() : itemUseController.UseItem();
+                if (!used) return;
+                used = itemHeld.itemData.useEffect.Use(new ItemUseContext(player, this, itemHeld));
+                if (used) itemHeld.RemoveQuantity(1);
+
+                // If the item stack has no quantity, then remove the item stack from inventory and set the held item to null.
+                if (!itemHeld.HasQuantity())
+                {
+                    RemoveItem(items.IndexOf(itemHeld));
+                    SetItemHeld(null);
+                }
+            }
+            else if (itemHeld.itemData.itemUseType == ItemUseType.Swing)
+            {
+                bool used = itemUseController.SwingItem();
+                if (!used) return;
+            }
+        }
+    }
+
+    public void OnUseShield(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            if (equippedItems.Find(e => e.itemData.itemUseType == ItemUseType.Shield) == null) return;
+                itemUseController.StartBlocking();
+        }
+        else
+        {
+            itemUseController.StopBlocking();
+        }
+    }
+
+    public void SetItemHeld(Item item)
+    {
+        // Remove the gameobject belonging to the previously held item.
+        if (heldItemObject != null)
+        {
+            itemUseController.swingableCollision = null;
+
+            Destroy(heldItemObject);
+            heldItemObject = null;
+        }
+
+        itemHeld = item;
+
+        // Selecting an empty hotbar slot simply leaves the hand empty.
+        if (itemHeld == null || itemHeld.itemData == null || itemHeld.itemData.equippedPrefab == null) return;
+
+        BoneAttachmentEntry rightHandEntry = boneAttachments.Find(entry => entry.attachment == EquipmentAttachment.RightHand);
+
+        Debug.Log("Made it this far");
+
+        heldItemObject = Instantiate(itemHeld.itemData.equippedPrefab, rightHandEntry.attachmentPoint);
+        //Set swingable collision if possible to reset the hit state when the item is used. This is for pickaxe particle effects.
+        itemUseController.swingableCollision = heldItemObject.GetComponentInChildren<SwingableCollision>();
+    }
+
 }
