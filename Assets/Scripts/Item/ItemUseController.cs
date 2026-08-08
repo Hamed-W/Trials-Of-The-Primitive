@@ -12,8 +12,11 @@ public class ItemUseController : MonoBehaviour
 
     private bool canSwing = true;
     private bool canUseItem = true;
+    public bool isBlocking = false;
+
 
     public SwingableCollision swingableCollision;
+    public ShieldBlock shieldBlock;
 
     [SerializeField] private PlayerStats playerStats;
 
@@ -30,14 +33,13 @@ public class ItemUseController : MonoBehaviour
     //Animation events for setting swing hit window.
     public void BeginSwingHitWindow()
     {
-        Debug.Log("Start swing");
         if (swingableCollision == null) return;
         swingableCollision.StartSwing();
+        StopBlocking();
     }
 
     public void EndSwingHitWindow()
     {
-        Debug.Log("End swing");
         if (swingableCollision == null) return;
         swingableCollision.EndSwing();
     }
@@ -78,12 +80,17 @@ public class ItemUseController : MonoBehaviour
 
     public void StartBlocking()
     {
-        animator.SetBool("isBlocking", true);
+        if (swingableCollision == null || swingableCollision.midSwing != true)
+        { 
+            animator.SetBool("isBlocking", true);
+            isBlocking = true;
+        }
     }
 
     public void StopBlocking()
     {
         animator.SetBool("isBlocking", false);
+        isBlocking = false;
     }
 
 

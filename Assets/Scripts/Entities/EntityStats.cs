@@ -21,6 +21,10 @@ public class EntityStats : MonoBehaviour
     public float movementSpeed;
     public float currentHealth;
 
+    public bool isWeakened = false;
+
+    //public bool blocked = false;
+
 
 
     public void SetLevel(int level)
@@ -31,5 +35,31 @@ public class EntityStats : MonoBehaviour
         size = baseSize + sizeGrowth * (level - 1);
         movementSpeed = baseMovementSpeed + speedGrowth * (level - 1);
         currentHealth = maxHealth;
+    }
+
+    public bool TakeDamage(float damage)
+    {
+        if (damage <= 0f)
+            return false;
+
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        return currentHealth <= 0f;
+    }
+
+    public void Weaken(float weakenAmount)
+    {
+        if (isWeakened) return;
+        Debug.Log("Weakened");
+        damage = Mathf.Max(damage - weakenAmount, 0);
+        isWeakened = true;
+    }
+    public void RemoveWeaken()
+    {
+        if (!isWeakened) return;
+        Debug.Log("Removed Weakness");
+        damage = baseDamage + damageGrowth * (level - 1);
+        isWeakened = false;
     }
 }

@@ -22,6 +22,7 @@ MonoBehaviour:
   itemUseAmount: 0
   equippable: 1
   attachment: 0
+  inHandPrefab: {fileID: 9148574505011437106, guid: 6321526a13a0daf419054276b493f166, type: 3}
   equippedPrefab: {fileID: 9148574505011437106, guid: 6321526a13a0daf419054276b493f166, type: 3}
   statModifiers:
   - statType: 0

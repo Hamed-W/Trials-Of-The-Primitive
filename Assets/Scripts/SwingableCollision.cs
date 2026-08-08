@@ -5,27 +5,39 @@ using UnityEngine;
 public class SwingableCollision : MonoBehaviour
 {
     public bool midSwing = false;
-    public bool hasHit = false;
+    //public bool hasHit = false;
+    private HashSet<GameObject> objectsHit = new HashSet<GameObject>();
     public ParticleSystem sparks;
+    public ItemData itemData;
+    public PlayerStats playerStats;
 
     void OnTriggerStay(Collider other)
     {
-        /*if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Entity"))
         {
-            GameObject enemy = other.gameObject;
-            if (!canAttack && !enemiesHit.Contains(enemy))
+            if (!itemData.isPickaxe)
             {
-                enemiesHit.Add(enemy);
-                enemy.GetComponent<EnemyHealth>().TakeDamage(swordDamage);
+                GameObject enemy = other.gameObject;
+                if (midSwing && !objectsHit.Contains(enemy))
+                {
+                    objectsHit.Add(enemy);
+                    float damage = itemData.itemUseAmount * playerStats.damageModifier;
+                    Debug.Log("Enemy Hit " + damage.ToString());
+                    enemy.GetComponent<EntityBehaviour>().TakeDamage(damage);
+                }
             }
-        }*/
+        }
         if (other.CompareTag("Mineable"))
         {
-            GameObject envObject = other.gameObject;
-            if (midSwing && !hasHit)
+            if (itemData.isPickaxe)
             {
-                sparks.Emit(5);
-                hasHit = true;
+                GameObject envObject = other.gameObject;
+                if (midSwing && !objectsHit.Contains(envObject))//!hasHit)
+                {
+                    objectsHit.Add(envObject);
+                    if (sparks != null) sparks.Emit(5);
+                    //hasHit = true;
+                }
             }
         }
     }
@@ -42,7 +54,8 @@ public class SwingableCollision : MonoBehaviour
 
     public void ResetHit()
     {
-        hasHit = false;
+        objectsHit.Clear();
+        //hasHit = false;
     }
 
 }

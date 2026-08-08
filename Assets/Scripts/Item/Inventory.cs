@@ -68,7 +68,6 @@ public class Inventory : MonoBehaviour
         items[firstIndex] = items[secondIndex];
         items[secondIndex] = temporaryItem;
 
-        Debug.Log(itemHeld == temporaryItem);
 
         InventoryChanged?.Invoke();
     }
@@ -80,7 +79,6 @@ public class Inventory : MonoBehaviour
         int startQuantity = quantity;
         if (itemData.maximumStackSize > 1) // This fills any existing item stacks first, before creating new stacks.
         {
-            Debug.Log("1");
             foreach (Item item in items)
             {
                 if (item == null || item.itemData == null)
@@ -99,14 +97,12 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        Debug.Log("2");
         // New stack creation if the old stack didn't fill the entire quantity.
         while (quantity > 0)
         {
             int emptyIndex = items.FindIndex(item => item == null || item.itemData == null); // Finds the first empty slot in the inventory.
             if (emptyIndex == -1) break;
 
-            Debug.Log("3");
 
             int stackQuantity = Mathf.Min(quantity, itemData.maximumStackSize);
 
@@ -117,7 +113,6 @@ public class Inventory : MonoBehaviour
 
         if (startQuantity > quantity) InventoryChanged?.Invoke();
 
-        Debug.Log("QUANTITY" + quantity.ToString());
         return quantity;
     }
 
@@ -203,7 +198,15 @@ public class Inventory : MonoBehaviour
         {
             Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
             GameObject equippedObject = Instantiate(item.itemData.equippedPrefab, attachmentPoint);
-            Debug.Log("Instantiated object");
+            if (item.itemData.itemUseType == ItemUseType.Shield)
+            {
+                itemUseController.shieldBlock = equippedObject.GetComponentInChildren<ShieldBlock>();
+                if (itemUseController.shieldBlock != null)
+                {
+                    itemUseController.shieldBlock.itemData = item.itemData;
+                    itemUseController.shieldBlock.playerStats = playerStats;
+                }
+            }
         }
         InventoryChanged?.Invoke();
         playerStats.RecalculateStats(equippedItems);
@@ -229,23 +232,20 @@ public class Inventory : MonoBehaviour
 
     public void UnequipItem(Item item)
     {
-        Debug.Log("Unequipping item: " + item.itemData.itemName);
         equippedItems.Remove(item);
         if (item.itemData.attachment != EquipmentAttachment.None)
         {
             Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
             foreach (Transform child in attachmentPoint)
             {
-                Debug.Log(child.name);
-                Debug.Log(item.itemData.equippedPrefab.name + "(Clone)");
                 if (child.name.Equals(item.itemData.equippedPrefab.name + "(Clone)"))
                 {
-                    Debug.Log("Destroying equipped item");
                     Destroy(child.gameObject);
                     break;
                 }
             }
         }
+        if (item.itemData.itemUseType == ItemUseType.Shield) itemUseController.swingableCollision = null;
         InventoryChanged?.Invoke();
         playerStats.RecalculateStats(equippedItems);
     }
@@ -263,7 +263,6 @@ public class Inventory : MonoBehaviour
         {
             if (itemHeld.itemData.itemUseType == ItemUseType.Use || itemHeld.itemData.itemUseType == ItemUseType.Consume)
             {
-                Debug.Log($"Using item: {itemHeld.itemData.itemName}");
                 bool used = (itemHeld.itemData.itemUseType == ItemUseType.Consume) ? itemUseController.UseConsumableItem() : itemUseController.UseItem();
                 if (!used) return;
                 used = itemHeld.itemData.useEffect.Use(new ItemUseContext(player, this, itemHeld));
@@ -287,15 +286,13 @@ public class Inventory : MonoBehaviour
 
     public void OnUseShield(InputValue value)
     {
-        if (value.isPressed)
-        {
-            if (equippedItems.Find(e => e.itemData.itemUseType == ItemUseType.Shield) == null) return;
-                itemUseController.StartBlocking();
-        }
-        else
+        if (equippedItems.Find(e => e.itemData.itemUseType == ItemUseType.Shield) == null) return;
+        if (!value.isPressed)
         {
             itemUseController.StopBlocking();
+            return;
         }
+        itemUseController.StartBlocking();
     }
 
     public void SetItemHeld(Item item)
@@ -312,15 +309,19 @@ public class Inventory : MonoBehaviour
         itemHeld = item;
 
         // Selecting an empty hotbar slot simply leaves the hand empty.
-        if (itemHeld == null || itemHeld.itemData == null || itemHeld.itemData.equippedPrefab == null) return;
+        if (itemHeld == null || itemHeld.itemData == null || itemHeld.itemData.inHandPrefab == null) return;
 
         BoneAttachmentEntry rightHandEntry = boneAttachments.Find(entry => entry.attachment == EquipmentAttachment.RightHand);
 
-        Debug.Log("Made it this far");
 
-        heldItemObject = Instantiate(itemHeld.itemData.equippedPrefab, rightHandEntry.attachmentPoint);
+        heldItemObject = Instantiate(itemHeld.itemData.inHandPrefab, rightHandEntry.attachmentPoint);
         //Set swingable collision if possible to reset the hit state when the item is used. This is for pickaxe particle effects.
         itemUseController.swingableCollision = heldItemObject.GetComponentInChildren<SwingableCollision>();
+        if (itemUseController.swingableCollision != null)
+        {
+            itemUseController.swingableCollision.itemData = item.itemData;
+            itemUseController.swingableCollision.playerStats = playerStats;
+        }
     }
 
     public void SplitItemStack(Item item, int newAmount, int index)

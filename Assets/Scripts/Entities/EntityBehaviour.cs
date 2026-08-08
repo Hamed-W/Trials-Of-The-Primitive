@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -60,7 +61,7 @@ public abstract class EntityBehaviour : MonoBehaviour
         //model.localScale *= entityStats.size;
 
         //attackCooldownTimer /= attackspeed //For future implementation of attack speed, if needed
-        SetLevel(10);
+        SetLevel(1);
         EnterState(EntityState.Idle);
     }
 
@@ -243,6 +244,7 @@ public abstract class EntityBehaviour : MonoBehaviour
             case EntityState.Dead:
                 agent.isStopped = true;
                 animator.SetTrigger("Death");
+                animator.SetBool("DeathBool", true);
                 break;
 
             case EntityState.Returning:
@@ -307,10 +309,22 @@ public abstract class EntityBehaviour : MonoBehaviour
         //I will add HP here after as well for death animation
     }
 
+    public virtual void TakeDamage(float damage)
+    {
+        if (currentState == EntityState.Dead) return;
+        bool died = entityStats.TakeDamage(damage);
+        if (died) Die();
+    }
     public virtual void Die()
     {
         GetComponent<ItemDropper>()?.DropItems();
         ChangeState(EntityState.Dead);
+        Invoke(nameof(DestroyEntity), 2f);
+    }
+
+    public virtual void DestroyEntity()
+    {
+        Destroy(gameObject);
     }
 
 }

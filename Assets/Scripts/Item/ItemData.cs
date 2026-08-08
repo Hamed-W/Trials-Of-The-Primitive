@@ -19,10 +19,12 @@ public class ItemData : ScriptableObject
     public ItemUseType itemUseType;
     public ItemUseEffect useEffect;
     public float itemUseAmount; // Amount of healing, eating or *base* damage for a sword.
+    public bool isPickaxe;
 
     [Header("Equipment")]
     public bool equippable;
     public EquipmentAttachment attachment;
+    public GameObject inHandPrefab;
     public GameObject equippedPrefab;
 
     public List<EquipmentStatModifiers> statModifiers;
