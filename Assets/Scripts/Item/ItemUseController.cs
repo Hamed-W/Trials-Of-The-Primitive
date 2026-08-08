@@ -15,6 +15,18 @@ public class ItemUseController : MonoBehaviour
 
     public SwingableCollision swingableCollision;
 
+    [SerializeField] private PlayerStats playerStats;
+
+    void Awake()
+    {
+        playerStats.StatsChanged += UpdateAttackSpeed;
+    }
+
+    private void UpdateAttackSpeed()
+    {
+        attackSpeed = playerStats.attackSpeed;
+    }
+
     //Animation events for setting swing hit window.
     public void BeginSwingHitWindow()
     {

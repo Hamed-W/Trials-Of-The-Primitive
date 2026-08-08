@@ -7,16 +7,16 @@ public abstract class ItemUseEffect : ScriptableObject
 
 public struct ItemUseContext
 {
-    public GameObject Player;
-    public Transform PlayerTransform;
-    public Inventory Inventory;
-    public Item Item;
+    public GameObject player;
+    public Transform playerTransform;
+    public Inventory inventory;
+    public Item item;
 
-    public ItemUseContext(GameObject player, Inventory inventory, Item item)
+    public ItemUseContext(GameObject pPlayer, Inventory pInventory, Item pItem)
     {
-        Player = player;
-        PlayerTransform = player.transform;
-        Inventory = inventory;
-        Item = item;
+        player = pPlayer;
+        playerTransform = player.transform;
+        inventory = pInventory;
+        item = pItem;
     }
 }

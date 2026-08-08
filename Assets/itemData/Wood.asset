@@ -18,7 +18,9 @@ MonoBehaviour:
   maximumStackSize: 99
   worldPrefab: {fileID: 555413158624911266, guid: 53d6874befcb7f04e9c21ad75d79db2c, type: 3}
   itemUseType: 3
-  useEffect: {fileID: 11400000, guid: 75318d52768a2fa44b8a15e6fe23219f, type: 2}
+  useEffect: {fileID: 11400000, guid: aa27294ed0127ee46befd68975ee7fdb, type: 2}
+  itemUseAmount: 10
   equippable: 0
   attachment: 0
   equippedPrefab: {fileID: 555413158624911266, guid: e3dd63820060dc6419ad95f3854dcb42, type: 3}
+  statModifiers: []

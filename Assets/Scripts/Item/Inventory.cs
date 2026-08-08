@@ -28,6 +28,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Transform itemDropPoint;
 
     [SerializeField] private GameObject player;
+    [SerializeField] private PlayerStats playerStats;
 
     [SerializeField] private ItemUseController itemUseController;
 
@@ -195,13 +196,17 @@ public class Inventory : MonoBehaviour
 
     public void EquipItem(Item item)
     {
-        if (item == null || item.itemData == null || item.itemData.attachment == EquipmentAttachment.None) return;
+        if (item == null || item.itemData == null) return;
         if (!ValidateEquipment(item)) return;
         equippedItems.Add(item);
-        Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
-        GameObject equippedObject = Instantiate(item.itemData.equippedPrefab, attachmentPoint);
-        Debug.Log("Instantiated object");
+        if (item.itemData.attachment != EquipmentAttachment.None)
+        {
+            Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
+            GameObject equippedObject = Instantiate(item.itemData.equippedPrefab, attachmentPoint);
+            Debug.Log("Instantiated object");
+        }
         InventoryChanged?.Invoke();
+        playerStats.RecalculateStats(equippedItems);
     }
 
     private bool ValidateEquipment(Item itemToEquip)
@@ -226,19 +231,23 @@ public class Inventory : MonoBehaviour
     {
         Debug.Log("Unequipping item: " + item.itemData.itemName);
         equippedItems.Remove(item);
-        Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
-        foreach (Transform child in attachmentPoint)
+        if (item.itemData.attachment != EquipmentAttachment.None)
         {
-            Debug.Log(child.name);
-            Debug.Log(item.itemData.equippedPrefab.name + "(Clone)");
-            if (child.name.Equals(item.itemData.equippedPrefab.name + "(Clone)"))
+            Transform attachmentPoint = boneAttachments.Find(entry => entry.attachment == item.itemData.attachment).attachmentPoint;
+            foreach (Transform child in attachmentPoint)
             {
-                Debug.Log("Destroying equipped item");
-                Destroy(child.gameObject);
-                break;
+                Debug.Log(child.name);
+                Debug.Log(item.itemData.equippedPrefab.name + "(Clone)");
+                if (child.name.Equals(item.itemData.equippedPrefab.name + "(Clone)"))
+                {
+                    Debug.Log("Destroying equipped item");
+                    Destroy(child.gameObject);
+                    break;
+                }
             }
         }
         InventoryChanged?.Invoke();
+        playerStats.RecalculateStats(equippedItems);
     }
 
     public void OnUseItem(InputValue value)

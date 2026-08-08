@@ -128,6 +128,9 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     {
         if (playerAttacked == false)
         {
+            PlayerStats playerStats = player.GetComponent<PlayerStats>();
+            playerStats.TakeDamage(entityStats.damage);
+
             Debug.Log($"Player took {entityStats.damage} damage from {this.name}");
             playerAttacked = true;
         }

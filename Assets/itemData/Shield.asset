@@ -19,6 +19,10 @@ MonoBehaviour:
   worldPrefab: {fileID: 8989109606312072488, guid: 04b1b13e1b5aa4047957ae3aabe4b79c, type: 3}
   itemUseType: 4
   useEffect: {fileID: 0}
+  itemUseAmount: 0
   equippable: 1
   attachment: 2
   equippedPrefab: {fileID: 4811934317335652646, guid: 1ab6ff81171b2974b865d08f3a5a841a, type: 3}
+  statModifiers:
+  - statType: 0
+    amount: 50

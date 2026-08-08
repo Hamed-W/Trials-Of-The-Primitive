@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(
     fileName = "New Item Data",
@@ -16,11 +18,14 @@ public class ItemData : ScriptableObject
 
     public ItemUseType itemUseType;
     public ItemUseEffect useEffect;
+    public float itemUseAmount; // Amount of healing, eating or *base* damage for a sword.
 
     [Header("Equipment")]
     public bool equippable;
     public EquipmentAttachment attachment;
     public GameObject equippedPrefab;
+
+    public List<EquipmentStatModifiers> statModifiers;
 }
 
 public enum EquipmentAttachment
@@ -42,4 +47,11 @@ public enum ItemUseType
     Shield,
     Helmet,
     Armor
+}
+
+[System.Serializable]
+public class EquipmentStatModifiers
+{
+    public PlayerStatType statType;
+    public float amount;
 }

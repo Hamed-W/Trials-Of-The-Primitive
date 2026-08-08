@@ -13,21 +13,21 @@ MonoBehaviour:
   m_Name: A
   m_EditorClassIdentifier: Assembly-CSharp::CraftingRecipe
   ingredients:
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    quantity: 1
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    quantity: 1
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    quantity: 1
   - itemData: {fileID: 0}
+    quantity: 1
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
     quantity: 1
   - itemData: {fileID: 0}
     quantity: 1
   - itemData: {fileID: 0}
     quantity: 1
-  - itemData: {fileID: 0}
-    quantity: 1
-  - itemData: {fileID: 0}
-    quantity: 1
-  - itemData: {fileID: 0}
-    quantity: 1
-  - itemData: {fileID: 0}
-    quantity: 1
-  - itemData: {fileID: 0}
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
     quantity: 1
   - itemData: {fileID: 0}
     quantity: 1

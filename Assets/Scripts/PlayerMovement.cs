@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private CharacterController characterController;
     private Vector2 moveInput;
-    public float movementSpeed;
+    [SerializeField] private float movementSpeed;
     public float gravityVelocity;
     public float gravityMultiplier;
 
@@ -32,11 +32,14 @@ public class PlayerMovement : MonoBehaviour
     public float sprintMultiplier;
     private bool isSprinting = false;
 
+    [SerializeField] private PlayerStats playerStats;
+
 
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
         playerAnimScript = GetComponent<PlayerAnimation>();
+        playerStats.StatsChanged += UpdateMovementSpeed;
     }
 
     // Start is called before the first frame update
@@ -54,6 +57,21 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         RotatePlayer();
+    }
+
+
+    private void UpdateMovementSpeed()
+    {
+        if (isSprinting)
+        {
+            movementSpeed /= sprintMultiplier;
+            movementSpeed = playerStats.movementSpeed;
+            movementSpeed *= sprintMultiplier;
+        }
+        else
+        {
+            movementSpeed = playerStats.movementSpeed;
+        }
     }
 
     void HandleMovement()
