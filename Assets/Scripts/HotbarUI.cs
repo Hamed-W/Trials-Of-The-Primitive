@@ -36,7 +36,7 @@ public class HotbarUI : MonoBehaviour
         {
             Item item = inventory.items[i];
 
-            if (item != null)
+            if (item != null && item.itemData != null)
                 slots[i].SetItemSlot(item);
             else
                 slots[i].ClearSlot();

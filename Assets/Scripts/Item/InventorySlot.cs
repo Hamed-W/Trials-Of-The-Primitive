@@ -16,7 +16,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private Inventory inventory;
     private Canvas rootCanvas;
-    private int slotIndex;
+    public int slotIndex;
 
     private Item item;
 
@@ -24,20 +24,24 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [SerializeField] private CanvasGroup canvasGroup;
 
     private RectTransform inventoryPanel;
-    private bool droppedOnInventorySlot;
+    public bool droppedOnInventorySlot;
+
+    [SerializeField] private GameObject splitStackPanel;
+    private SplitStackManager splitStackManager;
 
     public void SetItemSlot(Item newItem)
     {
-        try
+        if (newItem == null || newItem.itemData == null)
         {
-            item = newItem;
-            itemIcon.enabled = true;
-            itemIcon.sprite = item.itemData.icon;
-            nameText.text = item.itemData.name;
-            quantityText.text = item.quantity.ToString();
-        } catch { 
-            Debug.Log(gameObject.name);
+            ClearSlot();
+            return;
         }
+
+        item = newItem;
+        itemIcon.enabled = true;
+        itemIcon.sprite = item.itemData.icon;
+        nameText.text = item.itemData.name;
+        quantityText.text = item.quantity.ToString();
     }
 
     public void ClearSlot()
@@ -48,14 +52,14 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         nameText.text = string.Empty;
     }
 
-    public void Initialise(Inventory pInventory, int pSlotIndex, Canvas pRootCanvas, RectTransform pInventoryPanel)
+    public void Initialise(Inventory pInventory, int pSlotIndex, Canvas pRootCanvas, RectTransform pInventoryPanel, GameObject pSplitStackPanel)
     {
         if (!draggable) return;
         inventory = pInventory;
         slotIndex = pSlotIndex;
         rootCanvas = pRootCanvas;
         inventoryPanel = pInventoryPanel;
-            
+        splitStackPanel = pSplitStackPanel;            
     }
 
 
@@ -98,12 +102,20 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (!draggable) return;
         InventorySlot sourceSlot = data.pointerDrag.GetComponent<InventorySlot>();
+        CraftingSlot craftingSlot = data.pointerDrag.GetComponent<CraftingSlot>();
 
-        if (sourceSlot == null) return; // In case I have any other draggable UI elements that won't have InventorySlot.
+        //if (sourceSlot == null && craftingSlot == null) return; // In case I have any other draggable UI elements that won't have InventorySlot.
 
-        sourceSlot.droppedOnInventorySlot = true;
-
-        inventory.SwapItems(sourceSlot.slotIndex, slotIndex);
+        if (sourceSlot != null)
+        {
+            sourceSlot.droppedOnInventorySlot = true;
+            inventory.SwapItems(sourceSlot.slotIndex, slotIndex);
+        }
+        else if (craftingSlot != null)
+        {
+            craftingSlot.droppedOnInventorySlot = true;
+            craftingSlot.craftingManager.SwapInventoryAndCrafting(slotIndex, craftingSlot.slotIndex);
+        }
     }
 
     public void OnEndDrag(PointerEventData data)
@@ -150,5 +162,15 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
 
         if (clickedItem.itemData.equippable) inventory.EquipItem(clickedItem);
+    }
+
+    public void OnSlotClick()
+    {
+        Debug.Log("Hi 1");
+        if (inventory.splitStack) splitStackPanel.SetActive(true);
+        Debug.Log("Hi 2");
+        splitStackManager = splitStackPanel.GetComponent<SplitStackManager>();
+        splitStackManager.selectedItem = inventory.items[slotIndex];
+        splitStackManager.index = slotIndex;
     }
 }

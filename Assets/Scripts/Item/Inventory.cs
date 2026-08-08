@@ -31,6 +31,8 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private ItemUseController itemUseController;
 
+    public bool splitStack = false;
+
 
 
     private void Awake()
@@ -44,8 +46,6 @@ public class Inventory : MonoBehaviour
         {
             items.Add(null);
         }
-
-        if (items.Count > capacity) items.RemoveRange(capacity, items.Count - capacity);
     }
 
     public void SwapItems(int firstIndex, int secondIndex)
@@ -53,10 +53,21 @@ public class Inventory : MonoBehaviour
         if (firstIndex == secondIndex)
             return;
 
+        if (itemHeld == items[firstIndex])
+        {
+            SetItemHeld(items[secondIndex]);
+        }
+        else if (itemHeld == items[secondIndex])
+        {
+            SetItemHeld(items[firstIndex]);
+        }
+
         Item temporaryItem = items[firstIndex];
 
         items[firstIndex] = items[secondIndex];
         items[secondIndex] = temporaryItem;
+
+        Debug.Log(itemHeld == temporaryItem);
 
         InventoryChanged?.Invoke();
     }
@@ -71,7 +82,11 @@ public class Inventory : MonoBehaviour
             Debug.Log("1");
             foreach (Item item in items)
             {
-                if (item.itemData != itemData) continue;
+                if (item == null || item.itemData == null)
+                    continue;
+
+                if (item.itemData != itemData)
+                    continue;
 
                 quantity = item.AddQuantity(quantity); // Returns overflow quantity if the stack is full, hence "quantityRemaining".
 
@@ -145,6 +160,8 @@ public class Inventory : MonoBehaviour
         Item removedItem = items[index];
         if (removedItem == null) return null;
 
+        if (itemHeld == items[index]) SetItemHeld(null);
+
         if (equippedItems.Contains(removedItem) && GetItemQuantity(removedItem.itemData) <= 0)
             UnequipItem(removedItem);
 
@@ -163,6 +180,7 @@ public class Inventory : MonoBehaviour
         Item item = items[index];
         if (item == null || item.itemData == null || item.itemData.worldPrefab == null) return false;
 
+        if (itemHeld == item) SetItemHeld(null);
         if (equippedItems.Contains(item)) UnequipItem(item);
 
         GameObject droppedObject = Instantiate(item.itemData.worldPrefab, spawnPosition, spawnRotation);
@@ -246,7 +264,7 @@ public class Inventory : MonoBehaviour
                 if (!itemHeld.HasQuantity())
                 {
                     RemoveItem(items.IndexOf(itemHeld));
-                    SetItemHeld(null);
+                    //SetItemHeld(null);
                 }
             }
             else if (itemHeld.itemData.itemUseType == ItemUseType.Swing)
@@ -255,6 +273,7 @@ public class Inventory : MonoBehaviour
                 if (!used) return;
             }
         }
+        InventoryChanged.Invoke();
     }
 
     public void OnUseShield(InputValue value)
@@ -293,6 +312,28 @@ public class Inventory : MonoBehaviour
         heldItemObject = Instantiate(itemHeld.itemData.equippedPrefab, rightHandEntry.attachmentPoint);
         //Set swingable collision if possible to reset the hit state when the item is used. This is for pickaxe particle effects.
         itemUseController.swingableCollision = heldItemObject.GetComponentInChildren<SwingableCollision>();
+    }
+
+    public void SplitItemStack(Item item, int newAmount, int index)
+    {
+        item.quantity -= newAmount;
+        if (!item.HasQuantity()) RemoveItem(index);
+        Item newItem = new Item(item.itemData, newAmount);
+        int emptyIndex = items.FindIndex(item => item == null || item.itemData == null); // Finds the first empty slot in the inventory.
+        if (emptyIndex == -1)
+        {
+            GameObject droppedObject = Instantiate(newItem.itemData.worldPrefab, itemDropPoint.position, itemDropPoint.rotation);
+            PickUpItem pickup = droppedObject.GetComponent<PickUpItem>();
+            if (pickup != null) pickup.SetQuantity(newAmount);
+            return;
+        }
+        items[emptyIndex] = newItem;
+        InventoryChanged?.Invoke();
+    }
+
+    public void RefreshInventory()
+    {
+        InventoryChanged?.Invoke();
     }
 
 }

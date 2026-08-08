@@ -257,7 +257,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4367717432703669584}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3698296093406363270}
+        m_TargetAssemblyTypeName: InventorySlot, Assembly-CSharp
+        m_MethodName: OnSlotClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3698296093406363270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +287,10 @@ MonoBehaviour:
   quantityText: {fileID: 5979785619512204897}
   slotSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   draggable: 1
+  slotIndex: 0
   canvasGroup: {fileID: 7025333616403955673}
+  droppedOnInventorySlot: 0
+  splitStackPanel: {fileID: 0}
 --- !u!225 &7025333616403955673
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private InventorySlot slotPrefab;
 
     [SerializeField] private Canvas rootCanvas;
+    [SerializeField] private GameObject splitStackPanel;
 
     private readonly List<InventorySlot> slots = new();
 
@@ -36,7 +37,7 @@ public class InventoryUI : MonoBehaviour
         {
             InventorySlot slot = Instantiate(slotPrefab, content);
 
-            slot.Initialise(inventory, i, rootCanvas, GetComponent<RectTransform>());
+            slot.Initialise(inventory, i, rootCanvas, GetComponent<RectTransform>(), splitStackPanel);
 
             slots.Add(slot);
         }
@@ -48,7 +49,7 @@ public class InventoryUI : MonoBehaviour
         {
             Item item = inventory.items[i];
 
-            if (item != null)
+            if (item != null && item.itemData != null)
                 slots[i].SetItemSlot(item);
             else
                 slots[i].ClearSlot();

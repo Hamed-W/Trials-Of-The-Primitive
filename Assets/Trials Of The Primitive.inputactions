@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SplitStack",
+                    "type": "Button",
+                    "id": "feeaa740-4e84-4b17-8788-cd19408a3034",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -512,6 +521,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UseShield",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ede36638-282a-4453-b796-83bc61977a6f",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SplitStack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1102,6 +1102,7 @@ GameObject:
   - component: {fileID: 1483612655860199296}
   - component: {fileID: 6900899957321753974}
   - component: {fileID: 2852896770571530417}
+  - component: {fileID: 2199138632755734133}
   m_Layer: 0
   m_Name: Inventory
   m_TagString: Untagged
@@ -1139,7 +1140,7 @@ MonoBehaviour:
   capacity: 20
   items:
   - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
-    quantity: 1
+    quantity: 10
   - itemData: {fileID: 11400000, guid: 55bf555d8c35bea46b62c4c3ec58b051, type: 2}
     quantity: 1
   - itemData: {fileID: 11400000, guid: c06d0b79af8435b4eac5ebf2e01912a2, type: 2}
@@ -1164,6 +1165,7 @@ MonoBehaviour:
   itemDropPoint: {fileID: 827020109457690702}
   player: {fileID: 8399457648251700255}
   itemUseController: {fileID: 2599722442115015666}
+  splitStack: 0
 --- !u!114 &2852896770571530417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,6 +1196,23 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2199138632755734133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6080552662633707411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b646406a3c19084a8188e0c21786a4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 6900899957321753974}
+  craftingItems: []
+  itemDropPoint: {fileID: 827020109457690702}
+  recipes:
+  - {fileID: 11400000, guid: c94120af667e239429730ad840a37075, type: 2}
 --- !u!1 &6253752721112190335
 GameObject:
   m_ObjectHideFlags: 0
