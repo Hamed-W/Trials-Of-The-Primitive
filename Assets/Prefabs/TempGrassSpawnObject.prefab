@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 8170766645782341531}
   - component: {fileID: 3239507865109165273}
   - component: {fileID: 8782072777879566299}
+  - component: {fileID: -2685418084673581464}
+  - component: {fileID: 3687890041820593857}
   m_Layer: 6
   m_Name: TempGrassSpawnObject
-  m_TagString: Untagged
+  m_TagString: Mineable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -153,3 +155,35 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &-2685418084673581464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6589676656678092023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cc14d1156dcfa143b24f02515dd4099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maximumHealth: 30
+  itemDropper: {fileID: 3687890041820593857}
+--- !u!114 &3687890041820593857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6589676656678092023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 761c9921333f1034fa0d5ae4d5e9e0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  possibleDrops:
+  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+    dropChance: 1
+    minimumQuantity: 1
+    maximumQuantity: 10
+  spawnPoint: {fileID: 0}
