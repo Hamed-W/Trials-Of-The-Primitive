@@ -46,6 +46,8 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     public event Action OnDeath;
 
+    protected bool alwaysTargetPlayer = false;
+
 
 
     protected virtual void Awake()
@@ -130,6 +132,12 @@ public abstract class EntityBehaviour : MonoBehaviour
         if (player == null)
         {
             target = null;
+            return;
+        }
+
+        if (alwaysTargetPlayer)
+        {
+            target = player.transform;
             return;
         }
 
@@ -330,6 +338,11 @@ public abstract class EntityBehaviour : MonoBehaviour
     {
         OnDeath.Invoke();
         Destroy(gameObject);
+    }
+
+    public void SetAlwaysTargetPlayer(bool value)
+    {
+        alwaysTargetPlayer = value;
     }
 
 }

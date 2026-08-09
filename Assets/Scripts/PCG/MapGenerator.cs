@@ -1,5 +1,9 @@
 using UnityEngine;
 using Unity.AI.Navigation;
+using System;
+using UnityEngine.UIElements;
+using UnityEditor;
+using System.Collections.Generic;
 
 
 public class MapGenerator : MonoBehaviour
@@ -55,12 +59,6 @@ public class MapGenerator : MonoBehaviour
     public float desertHeightMultiplier = 6f;
     public AnimationCurve desertHeightCurve;
 
-
-
-    [Header("Biome Objects")]
-    public GameObject[] grassObjectPrefabs;
-    public GameObject[] desertObjectPrefabs;
-
     public int grassObjectCount = 200;
     public int desertObjectCount = 100;
 
@@ -69,21 +67,23 @@ public class MapGenerator : MonoBehaviour
     public LayerMask objectLayerMask;
     public float minimumObjectSpacing = 2f;
 
-    [Header("Entities")]
-    public GameObject[] grassEntityPrefabs;
-    public GameObject[] desertEntityPrefabs;
-
-    public int grassEntityCount = 200;
-    public int desertEntityCount = 100;
-
-    public LayerMask entityLayerMask;
-
 
     public LayerMask terrainLayerMask;
     
     public float maximumObjectSlope = 30f;
 
     [SerializeField] private NavMeshSurface navMeshSurface;
+
+    private float[,] biomeMap;
+    private float[,] finalHeightMap;
+    private int mapVertexSize;
+
+    public List<BiomePrefabs> biomeObjectPrefabs = new List<BiomePrefabs>();
+
+    void Awake()
+    {
+        GenerateMap();
+    }
 
 
     public void GenerateMap()
@@ -98,17 +98,17 @@ public class MapGenerator : MonoBehaviour
                 DestroyImmediate(transform.GetChild(i).gameObject);
         }
 
-        int mapVertexSize = (mapChunkSize - 1) * worldSize + 1;
+        mapVertexSize = (mapChunkSize - 1) * worldSize + 1;
 
         //float[,] heightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
-        float[,] biomeMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 1000, biomeScale, 1, 0.5f, 2f, offset);
+        biomeMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 1000, biomeScale, 1, 0.5f, 2f, offset);
 
         float[,] grassHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, grassNoiseScale, grassOctaves, grassPersistence, grassLacunarity, offset);
         float[,] desertHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 2000, desertNoiseScale, desertOctaves, desertPersistence, desertLacunarity, offset);
 
         Texture2D biomeTexture = CreateBiomeTexture(biomeMap);
 
-        float[,] finalHeightMap = BlendBiomeHeights(biomeMap, grassHeightMap, desertHeightMap);
+        finalHeightMap = BlendBiomeHeights(biomeMap, grassHeightMap, desertHeightMap);
         
 
         MeshData meshData = MeshGenerator.GenerateTerrainMesh(finalHeightMap, levelOfDetail);
@@ -119,7 +119,7 @@ public class MapGenerator : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Biome Objects");
+        SpawnBiomeObjects("Biome Objects");
 
         Physics.SyncTransforms();
 
@@ -129,7 +129,7 @@ public class MapGenerator : MonoBehaviour
             navMeshSurface.BuildNavMesh();
         }
 
-        SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Entities");
+        //SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Entities");
     }
 
     void OnValidate() {
@@ -138,33 +138,24 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    private void SpawnBiomeObjects(float[,] biomeMap, float[,] finalHeightMap, int mapVertexSize, string type)
+    public void SpawnBiomeObjects(string type)
     {
         GameObject objectParent = new GameObject(type);
 
         objectParent.transform.SetParent(transform);
         objectParent.transform.localPosition = Vector3.zero;
 
-        switch (type)
+        foreach (BiomePrefabs biome in biomeObjectPrefabs)
         {
-            case "Biome Objects":
-                Debug.Log("Biome Objects");
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassObjectPrefabs, grassObjectCount, 0f, 0.4f, objectParent.transform, objectLayerMask);
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertObjectPrefabs, desertObjectCount, 0.6f, 1f, objectParent.transform, objectLayerMask);
-                break;
-
-            case "Entities":
-                Debug.Log("Entities");
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, grassEntityPrefabs, grassEntityCount, 0f, 0.4f, objectParent.transform, entityLayerMask);
-                SpawnObjectsForBiome(biomeMap, finalHeightMap, mapVertexSize, desertEntityPrefabs, desertEntityCount    , 0.6f, 1f, objectParent.transform, entityLayerMask);
-                break;
+            if (biome.biome == Biome.None) continue;
+            SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParent.transform, objectLayerMask);
         }
     }
 
-    private void SpawnObjectsForBiome(float[,] biomeMap,float[,] heightMap,int mapVertexSize,GameObject[] prefabs,int objectCount,float minimumBiomeValue,float maximumBiomeValue,Transform parent, LayerMask layerMask)
+    public List<GameObject> SpawnObjectsForBiome(List<GameObject> prefabs, int objectCount, float minimumBiomeValue, float maximumBiomeValue, Transform parent, LayerMask layerMask)
     {
-        if (prefabs == null || prefabs.Length == 0)
-            return;
+        if (prefabs == null || prefabs.Count == 0)
+            return new List<GameObject>();
 
         int width = biomeMap.GetLength(0);
         int height = biomeMap.GetLength(1);
@@ -176,6 +167,7 @@ public class MapGenerator : MonoBehaviour
         int attempts = 0;
 
         int maximumAttempts = objectCount * 20;
+        List<GameObject> spawnedObjects = new List<GameObject>();
 
         while (spawned < objectCount && attempts < maximumAttempts)
         {
@@ -190,9 +182,9 @@ public class MapGenerator : MonoBehaviour
 
             Vector3 position = new Vector3(worldX, worldY, worldZ);*/
 
-            float worldX = Random.Range(topLeftX, -topLeftX);
+            float worldX = UnityEngine.Random.Range(topLeftX, -topLeftX);
 
-            float worldZ = Random.Range(-topLeftZ, topLeftZ);
+            float worldZ = UnityEngine.Random.Range(-topLeftZ, topLeftZ);
 
             Vector3 rayStart = new Vector3(worldX, 1000f, worldZ);
 
@@ -219,8 +211,9 @@ public class MapGenerator : MonoBehaviour
             {
                 continue;
             }
+            Debug.Log(biomeValue);
 
-            float slope = GetSlope(heightMap, mapX, mapY);
+            float slope = GetSlope(finalHeightMap, mapX, mapY);
 
             if (slope > maximumObjectSlope)
                 continue;
@@ -230,18 +223,20 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            GameObject prefab = prefabs[Random.Range(0, prefabs.Length)];
+            GameObject prefab = prefabs[UnityEngine.Random.Range(0, prefabs.Count)];
 
-            GameObject spawnedObject = Instantiate(prefab, position, Quaternion.Euler(0f,Random.Range(0f, 360f), 0f), parent);
+            GameObject spawnedObject = Instantiate(prefab, position, Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f), parent);
 
-            float randomScale = Random.Range(0.8f, 1.2f);
+            float randomScale = UnityEngine.Random.Range(0.8f, 1.2f);
 
             spawnedObject.transform.localScale *= randomScale;
 
+            spawnedObjects.Add(spawnedObject);
+
             spawned++;
         }
-        Debug.Log($"Spawned {spawned}/{objectCount} objects after {attempts} attempts."
-);
+
+        return spawnedObjects;
     }
 
     private float GetSlope(float[,] heightMap,int x,int y)
@@ -328,6 +323,44 @@ public class MapGenerator : MonoBehaviour
         return texture;
     }
 
+    public Biome GetBiomeFromCoord(Vector3 position)
+    {
+        int mapVertexSize = (mapChunkSize - 1) * worldSize + 1;
+        int width = biomeMap.GetLength(0);
+        int height = biomeMap.GetLength(1);
+
+        float topLeftX = (mapVertexSize - 1) / -2f;
+        float topLeftZ = (mapVertexSize - 1) / 2f;
+
+        float worldX = position.x;
+        float worldZ = position.z;
+
+        //Convert centred world coordinates back into map indices.
+        int mapX = Mathf.RoundToInt(worldX - topLeftX);
+
+        int mapY = Mathf.RoundToInt(topLeftZ - worldZ);
+
+        //Protect against rounding beyond the array boundaries.
+        mapX = Mathf.Clamp(mapX, 0, width - 1);
+        mapY = Mathf.Clamp(mapY, 0, height - 1);
+
+        float biomeValue = biomeMap[mapX, mapY];
+
+
+        if (biomeValue > 0f && biomeValue < 0.4f)
+        {
+            return Biome.Grass;
+        }
+        else if (biomeValue > 0.6 && biomeValue < 1)
+        {
+            return Biome.Sand;
+        }
+        else
+        {
+            return Biome.None;
+        }
+    }
+
 
 
     public class TerrainMap {
@@ -351,9 +384,6 @@ public class MapGenerator : MonoBehaviour
 
             Material terrainMaterialInstance = new Material(material);
 
-            Debug.Log(
-                terrainMaterialInstance.HasProperty("_BiomeMap")
-            );
             terrainMaterialInstance.SetTexture("_BiomeMap",biomeTexture);
 
             meshRenderer.sharedMaterial = terrainMaterialInstance;

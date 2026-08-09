@@ -5,6 +5,12 @@ public class ItemDropper : MonoBehaviour
 {
     [SerializeField] private List<DropData> possibleDrops;
     [SerializeField] private Transform spawnPoint;
+    private GameObject itemParent;
+
+    void Awake()
+    {
+        itemParent = GameObject.Find("Items");
+    }
 
     public void DropItems()
     {
@@ -27,7 +33,7 @@ public class ItemDropper : MonoBehaviour
 
     private void SpawnItem(ItemData itemData, Vector3 spawnPosition, int quantity)
     {
-        GameObject droppedItem = Instantiate(itemData.worldPrefab, spawnPosition, Random.rotation);
+        GameObject droppedItem = Instantiate(itemData.worldPrefab, spawnPosition, Random.rotation, itemParent.transform);
 
         PickUpItem pickUpItem = droppedItem.GetComponent<PickUpItem>();
         pickUpItem.SetQuantity(quantity);

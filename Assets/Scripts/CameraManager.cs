@@ -51,7 +51,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float lockOnDistance = 20f;
     [SerializeField] private float lockOnRadius = 5f;
 
-    [SerializeField] private List<Transform> lockOnTargets = new();
+    private List<Transform> lockOnTargets = new List<Transform>();
     [SerializeField] private int currentTargetIndex = -1;
 
     [SerializeField] private float switchTargetThreshold = 2f;
@@ -306,6 +306,7 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateTargetList()
     {
+        Debug.Log("Getting new list");
         Transform currentTarget = lockedTarget;
 
         FindLockOnTargets();
@@ -313,12 +314,21 @@ public class CameraManager : MonoBehaviour
         if (currentTarget != null && !lockOnTargets.Contains(currentTarget))
         {
             lockOnTargets.Add(currentTarget);
+            currentTargetIndex = lockOnTargets.IndexOf(currentTarget);
         }
-
-        currentTargetIndex = lockOnTargets.IndexOf(currentTarget);
+        else
+        {
+            if (currentTarget == null && lockOnTargets.Count > 0)
+            {
+                Debug.Log("New target");
+                currentTargetIndex = 0;
+                LockOntoTarget(lockOnTargets[currentTargetIndex]);
+            }
+        }
 
         if (lockOnTargets.Count == 0)
         {
+            Debug.Log("Unlock Target");
             UnlockTarget();
         }
     }
@@ -326,7 +336,6 @@ public class CameraManager : MonoBehaviour
     private void TargetSwitchInput()
     {
         Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
-        Debug.Log(lookInput.x);
 
         if (lookInput.x > switchTargetThreshold && canSwitchTarget)
         {
