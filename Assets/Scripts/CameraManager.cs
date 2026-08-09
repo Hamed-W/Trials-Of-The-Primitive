@@ -40,13 +40,25 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private float lockOnTurnSpeed = 12f;
 
-    private Transform lockedTarget;
+    [SerializeField] private Transform lockedTarget;
 
     public bool IsLockedOn => lockedTarget != null;
 
     [SerializeField] private Transform testEnemy;
 
     [SerializeField] private Transform thirdPersonTarget;
+
+    [SerializeField] private float lockOnDistance = 20f;
+    [SerializeField] private float lockOnRadius = 5f;
+
+    [SerializeField] private List<Transform> lockOnTargets = new();
+    [SerializeField] private int currentTargetIndex = -1;
+
+    [SerializeField] private float switchTargetThreshold = 2f;
+    [SerializeField] private bool canSwitchTarget = true;
+
+    [SerializeField] private float targetRefreshRate = 0.2f;
+    private float targetRefreshTimer;
 
 
 
@@ -64,7 +76,22 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       CheckInputs();
+        CheckInputs();
+        if (currentTargetIndex != -1) // IsLockedOn will be false if there is no locked on target.
+        {
+            targetRefreshTimer -= Time.deltaTime;
+
+            if (targetRefreshTimer <= 0f)
+            {
+                if (!IsBlending) UpdateTargetList();
+                targetRefreshTimer = targetRefreshRate;
+            }
+
+            if (IsLockedOn) // Should only try switch targets if there are any targets.
+            {
+                TargetSwitchInput();
+            }
+        }
     }
 
 
@@ -115,13 +142,24 @@ public class CameraManager : MonoBehaviour
         }*/
 
         // Camera toggle
-        if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame) ToggleView();
+        if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame)
+        {
+            if (IsLockedOn) UnlockTarget();
+            ToggleView();
+        }
         if (Keyboard.current != null && Keyboard.current[cameraLockKey].wasPressedThisFrame)
         {
-            if (IsLockedOn)
-                ToggleView();
+            if (IsLockedOn) UnlockTarget();
             else
-                LockOntoTarget(testEnemy);
+            {
+                FindLockOnTargets();
+
+                if (lockOnTargets.Count > 0)
+                {
+                    currentTargetIndex = 0;
+                    LockOntoTarget(lockOnTargets[0]);
+                }
+            }
         }
     }
 
@@ -136,12 +174,13 @@ public class CameraManager : MonoBehaviour
         if (cinemachineBrain.IsBlending)
             return;
 
+        /*
         if (IsLockedOn)
         {
             lockedTarget = null;
             lockOnCamera.Priority = 5;
             isThirdPerson = false;
-        }
+        }*/
 
         isThirdPerson = !isThirdPerson;
 
@@ -157,14 +196,14 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
-        if (pov != null)
-        {
-            // Face horizontally in the player's current direction.
-            pov.m_HorizontalAxis.Value = player.eulerAngles.y;
+            if (pov != null)
+            {
+                // Face horizontally in the player's current direction.
+                pov.m_HorizontalAxis.Value = player.eulerAngles.y;
 
-            // Reset looking up/down so the camera faces forward.
-            pov.m_VerticalAxis.Value = 0f;
-        }
+                // Reset looking up/down so the camera faces forward.
+                pov.m_VerticalAxis.Value = 0f;
+            }
 
             virtualCam.PreviousStateIsValid = false;
 
@@ -209,5 +248,120 @@ public class CameraManager : MonoBehaviour
         virtualCam.Priority = 5;
         freeLookCamera.Priority = 10;
         lockOnCamera.Priority = 30;
+    }
+
+
+    private void FindLockOnTargets()
+    {
+        lockOnTargets.Clear();
+        Vector3 direction = mainCamera.forward;
+
+        RaycastHit[] hits = Physics.SphereCastAll(player.position,lockOnRadius, direction, lockOnDistance);
+
+        foreach (RaycastHit hit in hits)
+        {
+            EntityBehaviour entity = hit.collider.GetComponentInParent<EntityBehaviour>();
+
+            if (entity == null) continue;
+
+            Transform target = entity.transform;
+
+            Vector3 directionToTarget = (target.position - player.position).normalized;
+
+            if (Vector3.Dot(mainCamera.forward, directionToTarget) <= 0f) continue; // Direction vector player -> target should be forward, in line with camera.forward as a result. If dot product is < 0 then enemy is behind the player.
+
+            if (!lockOnTargets.Contains(target))
+            {
+                lockOnTargets.Add(target);
+            }
+        }
+        int SortTargets(Transform a, Transform b)
+        {
+            float distanceA = (a.position - player.position).sqrMagnitude;
+            float distanceB = (b.position - player.position).sqrMagnitude;
+            return distanceA.CompareTo(distanceB);
+        }
+        lockOnTargets.Sort((a, b) => SortTargets(a,b));
+    }
+
+    private void UnlockTarget()
+    {
+        lockedTarget = null;
+
+        currentTargetIndex = -1;
+        lockOnTargets.Clear();
+
+        freeLookCamera.m_XAxis.Value = 0f;
+        freeLookCamera.PreviousStateIsValid = false;
+
+        lockOnCamera.Priority = 5;
+
+        isThirdPerson = true;
+
+        virtualCam.Priority = 10;
+        freeLookCamera.Priority = 20;
+
+        Debug.Log("Unlocked");
+    }
+
+    private void UpdateTargetList()
+    {
+        Transform currentTarget = lockedTarget;
+
+        FindLockOnTargets();
+
+        if (currentTarget != null && !lockOnTargets.Contains(currentTarget))
+        {
+            lockOnTargets.Add(currentTarget);
+        }
+
+        currentTargetIndex = lockOnTargets.IndexOf(currentTarget);
+
+        if (lockOnTargets.Count == 0)
+        {
+            UnlockTarget();
+        }
+    }
+
+    private void TargetSwitchInput()
+    {
+        Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
+        Debug.Log(lookInput.x);
+
+        if (lookInput.x > switchTargetThreshold && canSwitchTarget)
+        {
+            Debug.Log("Right");
+            SwitchTarget(1); // Look to the right index
+            canSwitchTarget = false;
+        }
+        else if (lookInput.x < -switchTargetThreshold && canSwitchTarget)
+        {
+            Debug.Log("Left");
+            SwitchTarget(-1); // Look to the left index
+            canSwitchTarget = false;
+        }
+
+        // Return mouse to rest to be able to switch again.
+        if (Mathf.Abs(lookInput.x) < 0.01)
+        {
+            canSwitchTarget = true;
+        }
+    }
+    private void SwitchTarget(int direction)
+    {
+        if (lockOnTargets.Count <= 1) return;
+
+        currentTargetIndex += direction;
+
+        if (currentTargetIndex >= lockOnTargets.Count)
+        {
+            currentTargetIndex = 0; // Return to closest enemy
+        }
+        else if (currentTargetIndex < 0)
+        {
+            currentTargetIndex = lockOnTargets.Count - 1; //Go to furthest enemy.
+        }
+
+        LockOntoTarget(lockOnTargets[currentTargetIndex]);
     }
 }

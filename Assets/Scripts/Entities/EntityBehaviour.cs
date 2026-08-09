@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public abstract class EntityBehaviour : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     [SerializeField] protected EntityStats entityStats;
 
+    public event Action OnDeath;
+
 
 
     protected virtual void Awake()
@@ -54,6 +57,8 @@ public abstract class EntityBehaviour : MonoBehaviour
         originalModelScale = model.localScale;
 
         spawnPosition = transform.position;
+
+        OnDeath += GetComponent<ItemDropper>().DropItems;
     }
 
     protected virtual void Start()
@@ -265,7 +270,7 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     protected virtual void SetRandomRoamingDestination()
     {
-        Vector3 randomOffset = Random.insideUnitSphere * roamingRadius;
+        Vector3 randomOffset = UnityEngine.Random.insideUnitSphere * roamingRadius;
 
         randomOffset.y = 0f; // Keep the offset on the horizontal plane of the Navmesh.
 
@@ -317,13 +322,13 @@ public abstract class EntityBehaviour : MonoBehaviour
     }
     public virtual void Die()
     {
-        GetComponent<ItemDropper>()?.DropItems();
         ChangeState(EntityState.Dead);
         Invoke(nameof(DestroyEntity), 2f);
     }
 
     public virtual void DestroyEntity()
     {
+        OnDeath.Invoke();
         Destroy(gameObject);
     }
 
