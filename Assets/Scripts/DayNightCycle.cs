@@ -55,12 +55,12 @@ public class DayNightCycle : MonoBehaviour
 
         timeText.text = GetTimeString();
 
-        if (!isDay && (timeOfDay < 0.75f && timeOfDay >= 0.25f))
+        if (!isDay && (timeOfDay < 0.9f && timeOfDay >= 0.25f))
         {
             StartDay();
         }
 
-        if (!isNight && (timeOfDay >= 0.75f || timeOfDay < 0.25f))
+        if (!isNight && (timeOfDay >= 0.9f || timeOfDay < 0.25f))
         {
             StartNight();
         }

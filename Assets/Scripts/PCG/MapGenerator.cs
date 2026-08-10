@@ -80,6 +80,10 @@ public class MapGenerator : MonoBehaviour
 
     public List<BiomePrefabs> biomeObjectPrefabs = new List<BiomePrefabs>();
 
+    private List<GameObject> biomeObjects = new List<GameObject>();
+
+    [SerializeField] private GameObject objectParent;
+
     void Awake()
     {
         GenerateMap();
@@ -140,15 +144,10 @@ public class MapGenerator : MonoBehaviour
 
     public void SpawnBiomeObjects(string type)
     {
-        GameObject objectParent = new GameObject(type);
-
-        objectParent.transform.SetParent(transform);
-        objectParent.transform.localPosition = Vector3.zero;
-
         foreach (BiomePrefabs biome in biomeObjectPrefabs)
         {
             if (biome.biome == Biome.None) continue;
-            SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParent.transform, objectLayerMask);
+            biomeObjects.AddRange(SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParent.transform, objectLayerMask));
         }
     }
 
@@ -211,7 +210,6 @@ public class MapGenerator : MonoBehaviour
             {
                 continue;
             }
-            Debug.Log(biomeValue);
 
             float slope = GetSlope(finalHeightMap, mapX, mapY);
 

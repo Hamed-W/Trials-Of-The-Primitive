@@ -16,6 +16,8 @@ public class ItemUseController : MonoBehaviour
 
 
     public SwingableCollision swingableCollision;
+    public float itemAttackSpeed;
+
     public ShieldBlock shieldBlock;
 
     [SerializeField] private PlayerStats playerStats;
@@ -50,10 +52,12 @@ public class ItemUseController : MonoBehaviour
 
         canSwing = false;
 
+        float finalAttackSpeed = attackSpeed * itemAttackSpeed;
+
         animator.SetFloat("attackSpeed", attackSpeed);
         animator.SetTrigger("swing");
 
-        Invoke(nameof(ResetSwing), swingCooldown / attackSpeed);
+        Invoke(nameof(ResetSwing), swingCooldown / finalAttackSpeed);
         return true;
     }
 

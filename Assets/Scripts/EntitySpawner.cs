@@ -57,7 +57,10 @@ public class EntitySpawner : MonoBehaviour
     {
         dayNightCycle.OnNightStarted -= ClearEntities;
         dayNightCycle.OnDayStarted -= ClearEntities;
+
         dayNightCycle.OnNightStarted -= StartNightWave;
+
+        dayNightCycle.OnDayStarted -= StopNightWave;
         dayNightCycle.OnDayStarted -= StartDaySpawning;
     }
 

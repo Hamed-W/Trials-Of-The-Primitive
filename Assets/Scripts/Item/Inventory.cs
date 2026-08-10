@@ -321,6 +321,7 @@ public class Inventory : MonoBehaviour
         {
             itemUseController.swingableCollision.itemData = item.itemData;
             itemUseController.swingableCollision.playerStats = playerStats;
+            itemUseController.itemAttackSpeed = item.itemData.statModifiers.Find(e => e.statType == PlayerStatType.AttackSpeed).amount;
         }
     }
 
