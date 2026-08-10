@@ -251,7 +251,8 @@ public abstract class EntityBehaviour : MonoBehaviour
                 break;
 
             case EntityState.Attacking:
-                agent.isStopped = true;
+                agent.isStopped = false;
+                agent.speed = runningSpeed;
                 break;
 
             case EntityState.Fleeing:

@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: StickmanRightHand
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Cylinder
+    m_Weight: 0
+  - m_Path: Cylinder.001
+    m_Weight: 0
+  - m_Path: metarig
+    m_Weight: 0
+  - m_Path: metarig/Quartile5
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/LeftLQuartile1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/LeftLQuartile1/LeftLQuartile2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/LeftLQuartile1/LeftLQuartile2/FootLeft
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/LeftLQuartile1/LeftLQuartile2/FootLeft/FootLeft_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/pelvis.L
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/pelvis.L/pelvis.L_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/pelvis.R
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/pelvis.R/pelvis.R_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/1.001
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/1.001/1.001_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF1.1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF1.1/LeftF1.2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF1.1/LeftF1.2/LeftF1.3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF1.1/LeftF1.2/LeftF1.3/LeftF1.3_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/LeftF1.002
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/LeftF1.002/LeftF1.002_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/NewLeftF2.2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/NewLeftF2.2/LeftF2.3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/NewLeftF2.2/LeftF2.3/LeftF2.4
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF2.1/NewLeftF2.2/LeftF2.3/LeftF2.4/LeftF2.4_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF3.1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF3.1/LeftF3.2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF3.1/LeftF3.2/LeftF3.3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF3.1/LeftF3.2/LeftF3.3/LeftF3.4
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF3.1/LeftF3.2/LeftF3.3/LeftF3.4/LeftF3.4_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF4.1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF4.1/LeftF4.2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF4.1/LeftF4.2/LeftF4.3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF4.1/LeftF4.2/LeftF4.3/LeftF4.4
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF4.1/LeftF4.2/LeftF4.3/LeftF4.4/LeftF4.4_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF5.1
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF5.1/LeftF5.2
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF5.1/LeftF5.2/LeftF5.3
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF5.1/LeftF5.2/LeftF5.3/LeftF5.4
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/LeftAQuartile1/LeftAQuartile2/LeftAQuartile3/1/LeftF5.1/LeftF5.2/LeftF5.3/LeftF5.4/LeftF5.4_end
+    m_Weight: 1
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/Quartile2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/Quartile2/Quartile1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/Quartile2/Quartile1/Quartile1_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF1.1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF1.1/RightF1.2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF1.1/RightF1.2/RightF1.3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF1.1/RightF1.2/RightF1.3/RightF1.3_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF2.2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF2.2/RightF2.3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF2.2/RightF2.3/RightF2.4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF2.1/RightF2.2/RightF2.3/RightF2.4/RightF2.4_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF3.1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF3.1/RightF3.2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF3.1/RightF3.2/RightF3.3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF3.1/RightF3.2/RightF3.3/RightF3.4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF3.1/RightF3.2/RightF3.3/RightF3.4/RightF3.4_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF4.1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF4.1/RightF4.2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF4.1/RightF4.2/RightF4.3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF4.1/RightF4.2/RightF4.3/RightF4.4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF4.1/RightF4.2/RightF4.3/RightF4.4/RightF4.4_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF5.1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF5.1/RightF5.2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF5.1/RightF5.2/RightF5.3
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF5.1/RightF5.2/RightF5.3/RightF5.4
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/Quartile4/Quartile3/RightAQuartile1/RightAQuartile2/RightAQuartile3/NewRightAQuartile4/RightF5.1/RightF5.2/RightF5.3/RightF5.4/RightF5.4_end
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/RightLQuartile1
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/RightLQuartile1/RightLQuartile2
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/RightLQuartile1/RightLQuartile2/FootRight
+    m_Weight: 0
+  - m_Path: metarig/Quartile5/RightLQuartile1/RightLQuartile2/FootRight/FootRight_end
+    m_Weight: 0

@@ -671,6 +671,8 @@ MonoBehaviour:
   attackData:
   - colliders:
     - {fileID: 3404850221883564823}
+  attackMoveSpeedMultiplier: 1
+  attackExitRangeMultiplier: 1.25
   playerAttacked: 0
 --- !u!65 &-1196360238278944164
 BoxCollider:
@@ -1304,7 +1306,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6371483169258953454}
-  - component: {fileID: 2209460666255624062}
   m_Layer: 0
   m_Name: UIAnchor
   m_TagString: Untagged
@@ -1327,18 +1328,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5236279589553601618}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2209460666255624062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7594667226569902805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a796e87e06ff4546ab99766733c4cfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8143259702480176902
 GameObject:
   m_ObjectHideFlags: 0

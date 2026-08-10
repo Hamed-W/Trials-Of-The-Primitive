@@ -13,11 +13,13 @@ public class AggressiveEntityBehaviour : EntityBehaviour
 
     protected bool attackAnimationFinished = true;
 
-    [SerializeField] protected float baseAttackRange = 2f;
+    [SerializeField] protected float baseAttackRange = 2.5f;
 
     [SerializeField] protected float attackRange;
 
     [SerializeField] protected List<AttackData> attackData;
+
+    [SerializeField] protected float attackMoveSpeedMultiplier = 0.4f;
 
 
     public bool playerAttacked = false;
@@ -57,27 +59,39 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     {
         if (target == null)
         {
-            if (attackAnimationFinished)
-                ChangeState(EntityState.Idle);
-
+            if (attackAnimationFinished) ChangeState(EntityState.Idle);
             return;
         }
 
         FaceTarget();
 
         float distance = Vector3.Distance(transform.position, target.position);
+        float stopDistance = attackRange * 0.7f;
 
-        if (!attackAnimationFinished) return;
-
-        if (distance > attackRange)
+        if (distance <= stopDistance)
         {
-            animator.SetBool("Idle", false);
-            ChangeState(EntityState.Chasing);
-            return;
+            agent.isStopped = true;
+            animator.SetBool("Idle", true);
         }
         else
         {
-            animator.SetBool("Idle", true);
+            agent.isStopped = false;
+            animator.SetBool("Idle", false);
+            agent.SetDestination(target.position);
+        }
+
+        if (!attackAnimationFinished)
+        {
+            agent.speed = runningSpeed * attackMoveSpeedMultiplier;
+            return;
+        }
+
+        agent.speed = runningSpeed;
+
+        if (distance > attackRange)
+        {
+            ChangeState(EntityState.Chasing);
+            return;
         }
 
         if (attackCooldownTimer <= 0f)
@@ -88,9 +102,11 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     private void StartAttack()
     {
         attackAnimationFinished = false;
-        //attackCooldownTimer = attackCooldownDuration;
+
+        agent.speed = runningSpeed * attackMoveSpeedMultiplier;
 
         PrepareAttack();
+
         animator.SetTrigger(Animator.StringToHash("Attack"));
     }
 
@@ -104,6 +120,7 @@ public class AggressiveEntityBehaviour : EntityBehaviour
     public void OnAttackAnimationFinished()
     {
         attackAnimationFinished = true;
+
         attackCooldownTimer = attackCooldownDuration;
     }
     
@@ -135,21 +152,6 @@ public class AggressiveEntityBehaviour : EntityBehaviour
             playerAttacked = true;
         }
     }
-
-    /*
-    public void ApplyAttackDamage()
-    {
-        if (target == null)
-            return;
-
-        float distance = Vector3.Distance(transform.position, target.position);
-
-        if (distance > attackRange)
-            return;
-
-        // Replace with health functionality
-        // target.GetComponent<HealthScript>()?.TakeDamage(damage); or something like this
-    }*/
 }
 
 [System.Serializable]
