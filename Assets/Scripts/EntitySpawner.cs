@@ -57,7 +57,10 @@ public class EntitySpawner : MonoBehaviour
     {
         dayNightCycle.OnNightStarted -= ClearEntities;
         dayNightCycle.OnDayStarted -= ClearEntities;
+
         dayNightCycle.OnNightStarted -= StartNightWave;
+
+        dayNightCycle.OnDayStarted -= StopNightWave;
         dayNightCycle.OnDayStarted -= StartDaySpawning;
     }
 
@@ -77,15 +80,32 @@ public class EntitySpawner : MonoBehaviour
 
     private void StartDaySpawning()
     {
+        StartCoroutine(StartDaySpawningCoroutine());
+    }
+
+    private IEnumerator StartDaySpawningCoroutine()
+    {
+        yield return null;
+
+        yield return new WaitUntil(() => !mapGenerator.isMorphing);
+
         foreach (BiomePrefabs biome in entityPrefabs)
         {
             if (biome.biome == Biome.None) continue;
-            spawnedEntities.AddRange(mapGenerator.SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParents[biome.biome].transform, 0));
+            spawnedEntities.AddRange(mapGenerator.SpawnObjectsForBiome(biome.dayPrefabs,biome.biomeCount,biome.biomeMapRangeStart,biome.biomeMapRangeEnd,objectParents[biome.biome].transform,0));
         }
     }
 
+
+
+
     private IEnumerator SpawnNightWave()
     {
+        // Waits one frame so MapGenerator can begin its night transition first.
+        yield return null;
+        //Waits until isMorphing is false (transition is done).
+        yield return new WaitUntil(() => !mapGenerator.isMorphing);
+
         int amount = baseEnemiesPerNight + dayNightCycle.dayCount * enemiesAddedPerNight;
 
         for (int i = 0; i < amount; i++)

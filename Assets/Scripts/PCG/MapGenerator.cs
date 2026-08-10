@@ -1,9 +1,11 @@
-using UnityEngine;
-using Unity.AI.Navigation;
 using System;
-using UnityEngine.UIElements;
-using UnityEditor;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 
 public class MapGenerator : MonoBehaviour
@@ -80,9 +82,34 @@ public class MapGenerator : MonoBehaviour
 
     public List<BiomePrefabs> biomeObjectPrefabs = new List<BiomePrefabs>();
 
+    private List<GameObject> biomeObjects = new List<GameObject>();
+
+    [SerializeField] private GameObject objectParent;
+
+
+
+    [SerializeField] private float terrainMorphDuration = 3f;
+
+    [SerializeField] private DayNightCycle dayNightCycle;
+
+    [SerializeField] private Transform player;
+
+    public bool isMorphing = false;
+
+
     void Awake()
     {
+        dayNightCycle.OnDayStarted += SwitchToDay;
+        dayNightCycle.OnNightStarted += SwitchToNight;
         GenerateMap();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            StartCoroutine(MorphTerrain(finalHeightMap, CreateNightHeightMap(0f), biomeMap, CreateNightBiomeMap(1f)));
+        }
     }
 
 
@@ -106,7 +133,7 @@ public class MapGenerator : MonoBehaviour
         float[,] grassHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, grassNoiseScale, grassOctaves, grassPersistence, grassLacunarity, offset);
         float[,] desertHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 2000, desertNoiseScale, desertOctaves, desertPersistence, desertLacunarity, offset);
 
-        Texture2D biomeTexture = CreateBiomeTexture(biomeMap);
+        Texture2D biomeTexture = UpdateBiomeTexture(biomeMap);
 
         finalHeightMap = BlendBiomeHeights(biomeMap, grassHeightMap, desertHeightMap);
         
@@ -119,7 +146,7 @@ public class MapGenerator : MonoBehaviour
 
         Physics.SyncTransforms();
 
-        SpawnBiomeObjects("Biome Objects");
+        SpawnBiomeObjects();
 
         Physics.SyncTransforms();
 
@@ -138,17 +165,12 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    public void SpawnBiomeObjects(string type)
+    public void SpawnBiomeObjects()
     {
-        GameObject objectParent = new GameObject(type);
-
-        objectParent.transform.SetParent(transform);
-        objectParent.transform.localPosition = Vector3.zero;
-
         foreach (BiomePrefabs biome in biomeObjectPrefabs)
         {
             if (biome.biome == Biome.None) continue;
-            SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParent.transform, objectLayerMask);
+            biomeObjects.AddRange(SpawnObjectsForBiome(biome.dayPrefabs, biome.biomeCount, biome.biomeMapRangeStart, biome.biomeMapRangeEnd, objectParent.transform, objectLayerMask));
         }
     }
 
@@ -211,7 +233,6 @@ public class MapGenerator : MonoBehaviour
             {
                 continue;
             }
-            Debug.Log(biomeValue);
 
             float slope = GetSlope(finalHeightMap, mapX, mapY);
 
@@ -235,6 +256,8 @@ public class MapGenerator : MonoBehaviour
 
             spawned++;
         }
+
+        Debug.Log("spawned");
 
         return spawnedObjects;
     }
@@ -294,16 +317,19 @@ public class MapGenerator : MonoBehaviour
 
     //Converts noise values to black-white colour in a texture that the shadergraph can sample and use to blend.
 
-    private Texture2D CreateBiomeTexture(float[,] biomeMap)
+    private Texture2D UpdateBiomeTexture(float[,] biomeMap)
     {
         int width = biomeMap.GetLength(0);
         int height = biomeMap.GetLength(1);
 
-        Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false, true);
-
-        texture.name = "Generated Biome Map";
-        texture.wrapMode = TextureWrapMode.Clamp;
-        texture.filterMode = FilterMode.Bilinear;
+        Texture2D texture = null;
+        if (terrainMap == null)
+        {
+            texture = new Texture2D(width, height, TextureFormat.RGBA32, false, true);
+            texture.name = "Generated Biome Map";
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.filterMode = FilterMode.Bilinear;
+        }
 
         Color[] colours = new Color[width * height];
 
@@ -316,12 +342,23 @@ public class MapGenerator : MonoBehaviour
                 colours[y * width + x] = new Color(biomeValue,biomeValue,biomeValue,1f);
             }
         }
-
-        texture.SetPixels(colours);
-        texture.Apply();
+        if (terrainMap != null)
+        {
+            terrainMap.biomeTexture.SetPixels(colours);
+            terrainMap.biomeTexture.Apply();
+        }
+        else
+        {
+            texture.SetPixels(colours);
+            texture.Apply();
+        }
 
         return texture;
     }
+
+
+
+
 
     public Biome GetBiomeFromCoord(Vector3 position)
     {
@@ -361,6 +398,238 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private float[,] GenerateNewHeightMap(int newSeed, float[,] targetBiomeMap)
+    {
+        float[,] grassHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, newSeed, grassNoiseScale, grassOctaves, grassPersistence, grassLacunarity, offset);
+
+        float[,] desertHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, newSeed + 2000, desertNoiseScale, desertOctaves, desertPersistence, desertLacunarity, offset);
+
+        return BlendBiomeHeights(targetBiomeMap, grassHeightMap, desertHeightMap);
+    }
+
+    private float[,] GenerateNewBiomeMap(int newSeed)
+    {
+        return Noise.GenerateNoiseMap(mapVertexSize,mapVertexSize, newSeed + 1000, biomeScale, 1, 0.5f, 2f, offset);
+    }
+
+
+
+
+    private float[,] CreateNightHeightMap(float height)
+    {
+        int width = finalHeightMap.GetLength(0);
+        int mapHeight = finalHeightMap.GetLength(1);
+
+        float[,] flatHeightMap =
+            new float[width, mapHeight];
+
+        for (int y = 0; y < mapHeight; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                flatHeightMap[x, y] = height;
+            }
+        }
+
+        return flatHeightMap;
+    }
+
+    private float[,] CreateNightBiomeMap(float value)
+    {
+        int width = biomeMap.GetLength(0);
+        int height = biomeMap.GetLength(1);
+
+        float[,] nightBiomeMap =
+            new float[width, height];
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                nightBiomeMap[x, y] = value;
+            }
+        }
+
+        return nightBiomeMap;
+    }
+
+
+    private void UpdateTerrainHeights(float[,] heightMap, bool finalUpdate)
+    {
+        Mesh mesh = terrainMap.meshFilter.sharedMesh;
+
+        Vector3[] vertices = mesh.vertices;
+
+        int increment = levelOfDetail == 0 ? 1: levelOfDetail * 2;
+
+        int vertexIndex = 0;
+
+        for (int y = 0; y < heightMap.GetLength(1); y += increment)
+        {
+            for (int x = 0; x < heightMap.GetLength(0); x += increment)
+            {
+                vertices[vertexIndex].y = heightMap[x, y];
+                vertexIndex++;
+            }
+        }
+
+        mesh.vertices = vertices;
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        if (finalUpdate)
+        {
+            MeshData colliderMeshData = MeshGenerator.GenerateTerrainMesh(heightMap, 1);
+            Mesh colliderMesh = colliderMeshData.CreateMesh();
+
+            terrainMap.meshCollider.sharedMesh = null;
+            terrainMap.meshCollider.sharedMesh = colliderMesh;
+        }
+        //terrainMap.meshCollider.sharedMesh = null;
+    }
+
+
+    private IEnumerator MorphTerrain(float[,] startHeightMap, float[,] targetHeightMap, float[,] startBiomeMap, float[,] targetBiomeMap)
+    {
+        player.GetComponent<PlayerMovement>().RemoveGravity();
+        player.GetComponent<PlayerMovement>().isMorphing = true;
+        isMorphing = true;
+        float elapsed = 0f;
+
+        int width = startHeightMap.GetLength(0);
+        int height = startHeightMap.GetLength(1);
+
+        float[,] currentHeights = new float[width, height];
+        float[,] currentBiomeMap = new float[width, height];
+
+        while (elapsed < terrainMorphDuration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / terrainMorphDuration);
+
+            t = Mathf.SmoothStep(0f, 1f, t);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    currentHeights[x, y] = Mathf.Lerp(startHeightMap[x, y], targetHeightMap[x, y], t);
+                    currentBiomeMap[x, y] = Mathf.Lerp(startBiomeMap[x, y], targetBiomeMap[x, y], t);
+                }
+            }
+
+            UpdateTerrainHeights(currentHeights, false);
+            UpdateBiomeTexture(currentBiomeMap);
+            UpdatePlayerHeight(currentHeights);
+            yield return null;
+        }
+
+        UpdateTerrainHeights(targetHeightMap, true);
+        UpdateBiomeTexture(targetBiomeMap);
+        UpdatePlayerHeight(targetHeightMap);
+
+        finalHeightMap = targetHeightMap;
+        biomeMap = targetBiomeMap;
+        // Rebuild the navmesh
+
+
+
+        //navMeshSurface.RemoveData();
+        //navMeshSurface.BuildNavMesh();
+        yield return StartCoroutine(UpdateNavMeshAsync());
+
+
+        player.GetComponent<PlayerMovement>().isMorphing = false;
+        isMorphing = false;
+        player.GetComponent<PlayerMovement>().RestoreGravity();
+    }
+
+    private IEnumerator UpdateNavMeshAsync()
+    {
+        AsyncOperation operation = navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
+
+        yield return operation;
+    }
+
+    private float GetHeightFromCoordinate(float[,] heightMap, Vector3 position)
+    {
+        int width = heightMap.GetLength(0);
+        int height = heightMap.GetLength(1);
+
+        float topLeftX = (mapVertexSize - 1) / -2f;
+        float topLeftZ = (mapVertexSize - 1) / 2f;
+
+        int mapX = Mathf.RoundToInt(position.x - topLeftX);
+        int mapY = Mathf.RoundToInt(topLeftZ - position.z);
+
+        mapX = Mathf.Clamp(mapX, 0, width - 1);
+        mapY = Mathf.Clamp(mapY, 0, height - 1);
+
+        return heightMap[mapX, mapY];
+    }
+
+    private void UpdatePlayerHeight(float[,] heightMap)
+    {
+        Vector3 position = player.position;
+        position.y = GetHeightFromCoordinate(heightMap, position) + 2.65f;
+        player.position = position;
+    }
+
+
+
+    private void DestroyBiomeObjects()
+    {
+        foreach (GameObject biomeObject in biomeObjects)
+        {
+            Destroy(biomeObject);
+        }
+        biomeObjects.Clear();
+    }
+
+
+    public void ChangeSeed()
+    {
+        seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+    }
+
+    public void SwitchToDay()
+    {
+        StartCoroutine(SwitchToDayCoroutine());
+    }
+
+    private IEnumerator SwitchToDayCoroutine()
+    {
+        ChangeSeed();
+
+        float[,] newBiomeMap = GenerateNewBiomeMap(seed);
+
+        float[,] newHeightMap = GenerateNewHeightMap(seed, newBiomeMap);
+
+        yield return StartCoroutine(MorphTerrain(finalHeightMap, newHeightMap, biomeMap, newBiomeMap));
+        
+        //Waits for the generation to finish BEFORE generating new objects.
+        SpawnBiomeObjects();
+    }
+
+    public void SwitchToNight()
+    {
+        StartCoroutine(SwitchToNightCoroutine());
+    }
+
+    private IEnumerator SwitchToNightCoroutine()
+    {
+        DestroyBiomeObjects();
+
+        yield return StartCoroutine(MorphTerrain(finalHeightMap, CreateNightHeightMap(0f), biomeMap, CreateNightBiomeMap(1f)));
+    }
+
+
+
+
+
+
 
 
     public class TerrainMap {
@@ -372,19 +641,21 @@ public class MapGenerator : MonoBehaviour
         public MeshRenderer meshRenderer;
         public MeshFilter meshFilter;
         public MeshCollider meshCollider;
+        public Texture2D biomeTexture;
 
 
         public TerrainMap(int size, Transform parent, Material material, Mesh mesh, Texture2D biomeTexture)
         {
             meshObject = new GameObject("Terrain Map");
 
+            this.biomeTexture = biomeTexture;
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshCollider = meshObject.AddComponent<MeshCollider>();
 
             Material terrainMaterialInstance = new Material(material);
 
-            terrainMaterialInstance.SetTexture("_BiomeMap",biomeTexture);
+            terrainMaterialInstance.SetTexture("_BiomeMap", biomeTexture);
 
             meshRenderer.sharedMaterial = terrainMaterialInstance;
 

@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     [SerializeField] private float movementSpeed;
     public float gravityVelocity;
+    [SerializeField] private float baseGravityMultiplier;
     public float gravityMultiplier;
 
     [SerializeField] private float groundedForce = -2f;
@@ -33,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isSprinting = false;
 
     [SerializeField] private PlayerStats playerStats;
+
+    public bool isMorphing = false;
 
 
     void Awake()
@@ -76,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleMovement()
     {
+        if (isMorphing) return;
         Vector3 cameraForward = cameraPos.forward;
         Vector3 cameraRight = cameraPos.right;
 
@@ -177,5 +181,14 @@ public class PlayerMovement : MonoBehaviour
         float finalYaw = cameraManager.CalculateYaw(moveInput);
 
         transform.rotation = Quaternion.Euler(0f, finalYaw, 0f);
+    }
+
+    public void RemoveGravity()
+    {
+        gravityMultiplier = 0f;
+    }
+    public void RestoreGravity()
+    {
+        gravityMultiplier = baseGravityMultiplier;
     }
 }
