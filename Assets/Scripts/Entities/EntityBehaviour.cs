@@ -48,6 +48,8 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     protected bool alwaysTargetPlayer = false;
 
+    [SerializeField] protected EntityUIHandler entityUI;
+
 
 
     protected virtual void Awake()
@@ -68,18 +70,21 @@ public abstract class EntityBehaviour : MonoBehaviour
         //model.localScale *= entityStats.size;
 
         //attackCooldownTimer /= attackspeed //For future implementation of attack speed, if needed
-        SetLevel(1);
         EnterState(EntityState.Idle);
     }
 
     public virtual void SetLevel(int level)
     {
         entityStats.SetLevel(level);
+        entityUI.SetLevel(level);
+        entityUI.SetMaxHP(entityStats.maxHealth);
+        entityUI.UpdateHP(entityStats.maxHealth);
         roamingRadius = entityStats.size * baseRoamingRadius;
         roamingSpeed = entityStats.movementSpeed * baseRoamingSpeed;
         runningSpeed = entityStats.movementSpeed * baseRunningSpeed;
         turnSpeed = entityStats.movementSpeed * baseTurnSpeed;
         model.localScale = originalModelScale * entityStats.size;
+        
     }
 
     protected virtual void Update()
@@ -326,6 +331,7 @@ public abstract class EntityBehaviour : MonoBehaviour
     {
         if (currentState == EntityState.Dead) return;
         bool died = entityStats.TakeDamage(damage);
+        entityUI.UpdateHP(entityStats.currentHealth);
         if (died) Die();
     }
     public virtual void Die()
@@ -344,7 +350,6 @@ public abstract class EntityBehaviour : MonoBehaviour
     {
         alwaysTargetPlayer = value;
     }
-
 }
 
 // State machine for entity behavior

@@ -301,12 +301,10 @@ public class CameraManager : MonoBehaviour
         virtualCam.Priority = 10;
         freeLookCamera.Priority = 20;
 
-        Debug.Log("Unlocked");
     }
 
     private void UpdateTargetList()
     {
-        Debug.Log("Getting new list");
         Transform currentTarget = lockedTarget;
 
         FindLockOnTargets();
@@ -320,7 +318,6 @@ public class CameraManager : MonoBehaviour
         {
             if (currentTarget == null && lockOnTargets.Count > 0)
             {
-                Debug.Log("New target");
                 currentTargetIndex = 0;
                 LockOntoTarget(lockOnTargets[currentTargetIndex]);
             }
@@ -328,7 +325,6 @@ public class CameraManager : MonoBehaviour
 
         if (lockOnTargets.Count == 0)
         {
-            Debug.Log("Unlock Target");
             UnlockTarget();
         }
     }
