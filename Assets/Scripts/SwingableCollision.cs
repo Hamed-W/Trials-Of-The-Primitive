@@ -36,6 +36,11 @@ public class SwingableCollision : MonoBehaviour
                 {
                     objectsHit.Add(envObject);
                     if (sparks != null) sparks.Emit(5);
+                    BreakableObject breakableObject = envObject.GetComponent<BreakableObject>();
+                    if (breakableObject != null)
+                    {
+                        breakableObject.TakeDamage(itemData.itemUseAmount);
+                    }
                     //hasHit = true;
                 }
             }

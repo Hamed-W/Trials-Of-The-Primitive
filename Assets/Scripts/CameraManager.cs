@@ -61,6 +61,22 @@ public class CameraManager : MonoBehaviour
     private float targetRefreshTimer;
 
 
+    private float baseFreeLookXSpeed;
+    private float baseFreeLookYSpeed;
+
+    private float basePOVXSpeed;
+    private float basePOVYSpeed;
+
+    void Awake()
+    {
+        pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
+
+        baseFreeLookXSpeed = freeLookCamera.m_XAxis.m_MaxSpeed;
+        baseFreeLookYSpeed = freeLookCamera.m_YAxis.m_MaxSpeed;
+
+        basePOVXSpeed = pov.m_HorizontalAxis.m_MaxSpeed;
+        basePOVYSpeed = pov.m_VerticalAxis.m_MaxSpeed;
+    }
 
 
     // Start is called before the first frame update
@@ -68,15 +84,17 @@ public class CameraManager : MonoBehaviour
     {
         /*Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;*/
-        pov = virtualCam.GetCinemachineComponent<CinemachinePOV>();
-        
-        ApplySensitivity();
+
+        if (SettingsManager.Instance != null)
+        {
+            sensitivity = SettingsManager.Instance.sensitivity;
+            ApplySensitivity();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckInputs();
         if (currentTargetIndex != -1) // IsLockedOn will be false if there is no locked on target.
         {
             targetRefreshTimer -= Time.deltaTime;
@@ -131,42 +149,43 @@ public class CameraManager : MonoBehaviour
     }
 
 
-    void CheckInputs()
+
+
+    void OnCameraToggle()
     {
-        /*
-        // Cursor lock
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }*/
+        if (IsLockedOn) UnlockTarget();
+        ToggleView();
+    }
 
-        // Camera toggle
-        if (Keyboard.current != null && Keyboard.current[toggleCameraKey].wasPressedThisFrame)
+    void OnCameraLock()
+    {
+        if (IsLockedOn) UnlockTarget();
+        else
         {
-            if (IsLockedOn) UnlockTarget();
-            ToggleView();
-        }
-        if (Keyboard.current != null && Keyboard.current[cameraLockKey].wasPressedThisFrame)
-        {
-            if (IsLockedOn) UnlockTarget();
-            else
+            FindLockOnTargets();
+
+            if (lockOnTargets.Count > 0)
             {
-                FindLockOnTargets();
-
-                if (lockOnTargets.Count > 0)
-                {
-                    currentTargetIndex = 0;
-                    LockOntoTarget(lockOnTargets[0]);
-                }
+                currentTargetIndex = 0;
+                LockOntoTarget(lockOnTargets[0]);
             }
         }
     }
 
     public void ApplySensitivity()
     {
-        lookAction.action.ApplyBindingOverride(new InputBinding{overrideProcessors =$"scaleVector2(x={sensitivity},y={sensitivity})"});
+        freeLookCamera.m_XAxis.m_MaxSpeed = baseFreeLookXSpeed * sensitivity;
+        freeLookCamera.m_YAxis.m_MaxSpeed = baseFreeLookYSpeed * sensitivity;
+
+        pov.m_HorizontalAxis.m_MaxSpeed = basePOVXSpeed * sensitivity;
+        pov.m_VerticalAxis.m_MaxSpeed = basePOVYSpeed * sensitivity;
     }
+
+    public void ApplyFOV(float fov)
+    {
+        virtualCam.m_Lens.FieldOfView = fov;
+    }
+
 
 
     private void ToggleView()
@@ -174,20 +193,11 @@ public class CameraManager : MonoBehaviour
         if (cinemachineBrain.IsBlending)
             return;
 
-        /*
-        if (IsLockedOn)
-        {
-            lockedTarget = null;
-            lockOnCamera.Priority = 5;
-            isThirdPerson = false;
-        }*/
-
         isThirdPerson = !isThirdPerson;
 
         if (isThirdPerson)
         {
             freeLookCamera.m_XAxis.Value = 0f;
-            // The reset y is minor (try without it). It causes the slight movement after switching (if no input) but ensures rotation is consistent after swapping to third person.
             freeLookCamera.m_YAxis.Value = 0f;
             freeLookCamera.PreviousStateIsValid = false;
 
@@ -309,18 +319,16 @@ public class CameraManager : MonoBehaviour
 
         FindLockOnTargets();
 
-        if (currentTarget != null && !lockOnTargets.Contains(currentTarget))
+        if (currentTarget != null)
         {
-            lockOnTargets.Add(currentTarget);
+            if (!lockOnTargets.Contains(currentTarget)) lockOnTargets.Add(currentTarget);
+
             currentTargetIndex = lockOnTargets.IndexOf(currentTarget);
         }
-        else
+        else if (lockOnTargets.Count > 0)
         {
-            if (currentTarget == null && lockOnTargets.Count > 0)
-            {
-                currentTargetIndex = 0;
-                LockOntoTarget(lockOnTargets[currentTargetIndex]);
-            }
+            currentTargetIndex = 0;
+            LockOntoTarget(lockOnTargets[currentTargetIndex]);
         }
 
         if (lockOnTargets.Count == 0)
@@ -347,7 +355,7 @@ public class CameraManager : MonoBehaviour
         }
 
         // Return mouse to rest to be able to switch again.
-        if (Mathf.Abs(lookInput.x) < 0.01)
+        if (Mathf.Abs(lookInput.x) < 1)
         {
             canSwitchTarget = true;
         }

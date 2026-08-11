@@ -34,6 +34,8 @@ public class Inventory : MonoBehaviour
 
     public bool splitStack = false;
 
+    [SerializeField] private GameObject bodyArmor;
+
 
 
     private void Awake()
@@ -208,6 +210,15 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+        if (item.itemData.itemUseType == ItemUseType.Armor)
+        {
+            GameObject armorChildInPrefab = item.itemData.inHandPrefab.transform.Find("Body Armor").gameObject;
+            Renderer prefabRenderer = armorChildInPrefab.GetComponent<Renderer>();
+            Renderer liveArmorRenderer = bodyArmor.GetComponent<Renderer>();
+            liveArmorRenderer.material = prefabRenderer.sharedMaterial;
+            bodyArmor.SetActive(true);
+        }
+
         InventoryChanged?.Invoke();
         playerStats.RecalculateStats(equippedItems);
     }
@@ -244,6 +255,10 @@ public class Inventory : MonoBehaviour
                     break;
                 }
             }
+        }
+        if (item.itemData.itemUseType == ItemUseType.Armor)
+        {
+            bodyArmor.SetActive(false);
         }
         if (item.itemData.itemUseType == ItemUseType.Shield) itemUseController.swingableCollision = null;
         InventoryChanged?.Invoke();

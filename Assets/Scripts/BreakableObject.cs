@@ -18,11 +18,11 @@ public class BreakableObject : MonoBehaviour
 
     void Start()
     {
-        DestroyObject(); // For testing purposes, destroy the object immediately
     }
 
     public void TakeDamage(float damage)
     {
+        Debug.Log($"Took {damage} damage");
         if (destroyed) return;
 
         currentHealth -= damage;

@@ -5,10 +5,6 @@ using UnityEngine.Rendering;
 
 public class VFXManager : MonoBehaviour
 {
-
-
-    public Volume fpVolume;
-    public Volume tpVolume;
     public Volume sandVolume;
     public Volume snowVolume;
     public Volume grassVolume;
@@ -27,13 +23,6 @@ public class VFXManager : MonoBehaviour
     [SerializeField] private Transform player;
 
     [SerializeField] private Biome biome = Biome.None;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

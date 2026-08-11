@@ -7,7 +7,7 @@ public class ItemDropper : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     private GameObject itemParent;
 
-    void Awake()
+    void Start()
     {
         itemParent = GameObject.Find("Items");
     }
