@@ -10,6 +10,8 @@ At night, hostile enemy waves spawn around the player and become progressively s
 The player wins by surviving the 5 days, after the night on the 5th day the player has won. The player loses if either their health or hunger reaches zero.
 
 How to Play
+Load Menu Scene to begin.
+
 
 The general gameplay loop is:
 
