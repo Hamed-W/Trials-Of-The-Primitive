@@ -104,7 +104,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         InventorySlot sourceSlot = data.pointerDrag.GetComponent<InventorySlot>();
         CraftingSlot craftingSlot = data.pointerDrag.GetComponent<CraftingSlot>();
 
-        //if (sourceSlot == null && craftingSlot == null) return; // In case I have any other draggable UI elements that won't have InventorySlot.
+        // if (sourceSlot == null && craftingSlot == null) return; // In case I have any other draggable UI elements that won't have InventorySlot.
 
         if (sourceSlot != null)
         {
@@ -128,6 +128,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         DestroyDraggedIcon();
     }
 
+    // Creates a new image that has same icon as the dragged slot.
     private void CreateDraggedIcon(Sprite sprite)
     {
         GameObject iconObject = new GameObject("Dragged Item Icon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));

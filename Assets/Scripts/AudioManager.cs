@@ -66,6 +66,8 @@ public class AudioManager : MonoBehaviour
         else if (biome == Biome.Sand) PlaySFX(sandFootstep);
     }
 
+
+    //Gets a random index to play one of the daytime music at random.
     public void PlayDayMusic()
     {
         if (dayMusic == null || dayMusic.Length == 0) return;

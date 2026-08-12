@@ -11,6 +11,7 @@ public class SplitStackManager : MonoBehaviour
     private int newAmount = 0;
     public int index;
 
+    // Updates the text to display the amount that we want to split into
     public void UpdateAmount(float percentage)
     {
         newAmount = Mathf.RoundToInt(selectedItem.quantity * percentage);

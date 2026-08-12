@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
+    // Applies movement speed multiplier on the base movement speed (we remove sprint multiplier if player is sprinting, apply the change and then reapply to ensure there is no extra benefit)
     private void UpdateMovementSpeed()
     {
         if (isSprinting)
@@ -83,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Moves player in direction of camera forward.
     void HandleMovement()
     {
         Vector3 cameraForward = cameraPos.forward;
@@ -102,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
         bool foundGround = Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, groundRayDistance, groundMask);
 
+        // Projects the direction vector onto the plane to ensure smooth slope movement.
         if (foundGround)
         {
             moveDirection = Vector3.ProjectOnPlane(moveDirection,hit.normal);
@@ -126,12 +129,14 @@ public class PlayerMovement : MonoBehaviour
             canJump = false;
         }
 
+        // We apply movement speed to the movementDirection to get our final velocity.
         Vector3 velocity = moveDirection * movementSpeed;
 
         velocity.y += verticalVelocity;
 
         characterController.Move(velocity * Time.deltaTime);
 
+        // Checks the player's velocity to check which state the user is in (walking, running, falling or idle).
         AnimState finalAnimation = (characterController.velocity.y < -fallingVelocityThreshold
         ? AnimState.Falling
         : (moveInput.sqrMagnitude > 0.001f
@@ -141,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimScript.SetAnimState(finalAnimation);
     }
 
+    // Plays the appropriate sound effect every interval based on the biome.
     private void HandleFootstepsSound()
     {
         if (!characterController.isGrounded || moveInput.sqrMagnitude < 0.01f)

@@ -62,14 +62,19 @@ public class DayNightCycle : MonoBehaviour
     private void Update()
     {
 
+        // Translates into in game time.
+
         timeOfDay += Time.deltaTime / dayLength;
 
         if (timeOfDay >= 1f) timeOfDay = 0f;
 
+        // Updates the skybox based on the new time.
         UpdateSkybox();
         UpdateSunAndMoon();
         UpdateAmbientLight();
 
+
+        // Checks for new day/night start.
         if (!isDay && (timeOfDay < 0.9f && timeOfDay >= 0.25f))
         {
             StartDay();
@@ -120,6 +125,7 @@ public class DayNightCycle : MonoBehaviour
         return $"{hours:00}:{minutes:00}";
     }
 
+
     private void StartNight()
     {
         isNight = true;
@@ -140,6 +146,7 @@ public class DayNightCycle : MonoBehaviour
 
         Debug.Log($"Day {dayCount} started");
 
+        // Checks if the player has won.
         if (dayCount > daysToSurvive)
         {
             uiHandler.OpenEndGamePanel(true);

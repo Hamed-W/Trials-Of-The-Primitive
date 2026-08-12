@@ -90,6 +90,7 @@ public class CraftingManager : MonoBehaviour
         CraftRecipe(recipe);
     }
 
+    // Removes the required quantity for each slot in the 3 by 3 crafting grid. It then adds it to the inventory.
     private void CraftRecipe(CraftingRecipe recipe)
     {
         for (int i = 0; i < 9; i++)
@@ -105,8 +106,10 @@ public class CraftingManager : MonoBehaviour
             if (!craftingItem.HasQuantity()) craftingItems[i] = null;
         }
 
+        // Remaining is how many is left after trying to fit the result into the inventory.
         int remaining = inventory.AddItem(recipe.resultItem, recipe.resultQuantity);
 
+        // It couldn't all fit, so we instantiate it into the ground.
         if (remaining > 0)
         {
             GameObject droppedObject = Instantiate(recipe.resultItem.worldPrefab, itemDropPoint.position, itemDropPoint.rotation);
@@ -123,6 +126,7 @@ public class CraftingManager : MonoBehaviour
         return craftingItems[index];
     }
 
+    // Swaps items between crafting indexes.
     public void SwapItems(int firstIndex, int secondIndex)
     {
         Item temp = craftingItems[firstIndex];
@@ -134,6 +138,7 @@ public class CraftingManager : MonoBehaviour
         CraftingChanged?.Invoke();
     }
 
+    // Swaps items between crafting grid and inventory grid.
     public void SwapInventoryAndCrafting(int inventoryIndex, int craftingIndex)
     {
         Item inventoryItem = inventory.items[inventoryIndex];
@@ -154,6 +159,7 @@ public class CraftingManager : MonoBehaviour
         CraftingChanged?.Invoke();
     }
 
+    // Instantiates the world prefab of an item and spawns it in front of hte player (itemDropPoint).
     public bool DropItem(int index)
     {
         Vector3 spawnPosition = itemDropPoint.position;
@@ -172,6 +178,7 @@ public class CraftingManager : MonoBehaviour
         return true;
     }
 
+    // Drops all remaining items in Crafting grid (for when inventory is closed).
     public void ClearCraftingItems()
     {
         for (int i = 0; i < craftingItems.Count; i++)

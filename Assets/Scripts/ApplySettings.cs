@@ -19,6 +19,7 @@ public class ApplySettings : MonoBehaviour
         ApplySoundSettings();
         ApplyGameSettings();
 
+        // Subscribes the local application of the settings to SettingsManager so that when the user makes a change on the settings panel it will automatically update the appropriate fields through here.
         SettingsManager.Instance.BindingsChanged += ApplyBindings;
         SettingsManager.Instance.SettingsChanged += ApplySoundSettings;
         SettingsManager.Instance.SettingsChanged += ApplyGameSettings;
@@ -35,6 +36,7 @@ public class ApplySettings : MonoBehaviour
         SettingsManager.Instance.SettingsChanged -= ApplyGameSettings;
     }
 
+    //Applies the control binding changes to the playerInput references.
     private void ApplyBindings()
     {
         SettingsManager.Instance.ApplySavedBindings(playerInput.actions);

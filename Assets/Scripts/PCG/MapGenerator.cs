@@ -110,33 +110,37 @@ public class MapGenerator : MonoBehaviour
 
         mapVertexSize = (mapChunkSize - 1) * worldSize + 1;
 
-        //float[,] heightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
+        // Generates the 2 heightmaps and the biomeMap using Perlin generation (done in Noise.GenerateNoiseMap to allow for factors like octaves and lacunarity.
         biomeMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 1000, biomeScale, 1, 0.5f, 2f, offset);
         float[,] grassHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, grassNoiseScale, grassOctaves, grassPersistence, grassLacunarity, offset);
         float[,] desertHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 2000, desertNoiseScale, desertOctaves, desertPersistence, desertLacunarity, offset);
         Texture2D biomeTexture = CreateBiomeTexture(biomeMap);
 
+        // Returns the final heightmap after applying the two different heightmaps to their biome regions and the mix for the region transition.
         finalHeightMap = BlendBiomeHeights(biomeMap, grassHeightMap, desertHeightMap);
         
+        // We have the coordinates so this returns MeshData which contains the vertices, triangles and UVs required for a mesh.
         MeshData meshData = MeshGenerator.GenerateTerrainMesh(finalHeightMap, levelOfDetail);
+        // Creates the mesh from the data in meshData.
         Mesh generatedMesh = meshData.CreateMesh();
+        // Creates new empty object which on construction takes the Mesh and applies it to its meshFilter and meshCollider, while applying the biome material.- 
         terrainMap = new TerrainMap(mapVertexSize, transform, terrainMaterial, generatedMesh, biomeTexture);
 
+        // Creates map boundaries so the player can't walk off.
         CreateMapBoundaries();
 
         Physics.SyncTransforms();
 
-        SpawnBiomeObjects("Biome Objects");
+        SpawnBiomeObjects();
 
         Physics.SyncTransforms();
 
+        // Builds the navmesh
         if (navMeshSurface != null)
         {
             navMeshSurface.RemoveData();
             navMeshSurface.BuildNavMesh();
         }
-
-        //SpawnBiomeObjects(biomeMap, finalHeightMap, mapVertexSize, "Entities");
     }
 
     void OnValidate() {
@@ -145,7 +149,7 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    public void SpawnBiomeObjects(string type)
+    public void SpawnBiomeObjects()
     {
         foreach (BiomePrefabs biome in biomeObjectPrefabs)
         {
@@ -154,6 +158,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    // Gets a random coordinate, checks if it is in the required biome for the object, and retries if it isn't. It will retry until it finds it's required biome or maximumAttempts is reached.
     public List<GameObject> SpawnObjectsForBiome(List<GameObject> prefabs, int objectCount, float minimumBiomeValue, float maximumBiomeValue, Transform parent, LayerMask layerMask)
     {
         if (prefabs == null || prefabs.Count == 0)
@@ -241,6 +246,7 @@ public class MapGenerator : MonoBehaviour
         return spawnedObjects;
     }
 
+    // Returns the slope angle by checking the coordinates near the x y parameters and comparing the direction vectors to Vector3.up.
     private float GetSlope(float[,] heightMap,int x,int y)
     {
         int width = heightMap.GetLength(0);

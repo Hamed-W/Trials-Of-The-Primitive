@@ -11,9 +11,11 @@ public class SwingableCollision : MonoBehaviour
     public ItemData itemData;
     public PlayerStats playerStats;
     public AudioManager audioManager;
+    public ItemData handItemData;
 
     void OnTriggerStay(Collider other)
     {
+        // Checks if swingable trigger collider is colliding with an entity right now.
         if (other.CompareTag("Entity"))
         {
             if (!itemData.isPickaxe)
@@ -34,6 +36,7 @@ public class SwingableCollision : MonoBehaviour
                 }
             }
         }
+        // Checks if swingable trigger collider is colliding with an mineable right now.
         if (other.CompareTag("Mineable"))
         {
             if (itemData.isPickaxe)

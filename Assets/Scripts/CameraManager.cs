@@ -113,6 +113,8 @@ public class CameraManager : MonoBehaviour
     }
 
 
+    // Calculates required yaw for player to move in direction for camera based on which camera is active (first person or third person).
+
     public float CalculateYaw(Vector2 moveInput)
     {
         if (!isThirdPerson)
@@ -173,6 +175,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    // Changes max speed of the cinemachine cameras to apply sensitivity change.
     public void ApplySensitivity()
     {
         freeLookCamera.m_XAxis.m_MaxSpeed = baseFreeLookXSpeed * sensitivity;
@@ -191,6 +194,7 @@ public class CameraManager : MonoBehaviour
 
     private void ToggleView()
     {
+        // This means if the camera is still blending between cinemachine cameras.
         if (cinemachineBrain.IsBlending)
             return;
 
@@ -223,6 +227,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    // Add gameobjects to the target group so that the virtual camera can focus on the targets.
     private void ConfigureLockOnGroup(Transform enemy)
     {
         lockOnTargetGroup.m_Targets = new CinemachineTargetGroup.Target[] 
@@ -262,6 +267,7 @@ public class CameraManager : MonoBehaviour
     }
 
 
+    //Clears the old lock on targets.
     private void FindLockOnTargets()
     {
         lockOnTargets.Clear();
@@ -269,6 +275,7 @@ public class CameraManager : MonoBehaviour
 
         RaycastHit[] hits = Physics.SphereCastAll(player.position,lockOnRadius, direction, lockOnDistance);
 
+        // Does a sphere cast all (meaning to get all enemies in the cast, not just the first) in front of the player in the direction the camera is facing.
         foreach (RaycastHit hit in hits)
         {
             EntityBehaviour entity = hit.collider.GetComponentInParent<EntityBehaviour>();
@@ -286,6 +293,7 @@ public class CameraManager : MonoBehaviour
                 lockOnTargets.Add(target);
             }
         }
+        // Sorts the target list in order of distance from player.
         int SortTargets(Transform a, Transform b)
         {
             float distanceA = (a.position - player.position).sqrMagnitude;
@@ -295,6 +303,7 @@ public class CameraManager : MonoBehaviour
         lockOnTargets.Sort((a, b) => SortTargets(a,b));
     }
 
+    // Disables camera lock and returns to third person camera.
     private void UnlockTarget()
     {
         lockedTarget = null;
@@ -314,6 +323,7 @@ public class CameraManager : MonoBehaviour
 
     }
 
+    // Updates current list and current target.
     private void UpdateTargetList()
     {
         Transform currentTarget = lockedTarget;
@@ -338,6 +348,8 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+
+    // Switches array position for target to point to a different close by entity based on which direction the mouse input is.
     private void TargetSwitchInput()
     {
         Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
@@ -361,6 +373,8 @@ public class CameraManager : MonoBehaviour
             canSwitchTarget = true;
         }
     }
+
+    // Changes the target index based on the mouse input direction and locks onto the new target.
     private void SwitchTarget(int direction)
     {
         if (lockOnTargets.Count <= 1) return;
