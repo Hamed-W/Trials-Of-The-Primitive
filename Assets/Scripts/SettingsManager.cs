@@ -11,6 +11,13 @@ public class SettingsManager : MonoBehaviour
     [Header("Saved Settings")]
     [Range(0f, 100f)]
     public float volume = 100f;
+
+    [Range(0f, 100f)]
+    public float musicVolume = 100f;
+
+    [Range(0f, 100f)]
+    public float sfxVolume = 100f;
+
     public float sensitivity = 1f;
     public float fov = 75f;
 
@@ -35,13 +42,17 @@ public class SettingsManager : MonoBehaviour
         ApplyVolume();
     }
 
-    public void SaveSettings(float newVolume, float newSensitivity, float newFOV)
+    public void SaveSettings(float newVolume, float newMusicVolume, float newSFXVolume, float newSensitivity, float newFOV)
     {
         volume = newVolume;
+        musicVolume = newMusicVolume;
+        sfxVolume = newSFXVolume;
+
         sensitivity = newSensitivity;
         fov = newFOV;
 
         ApplyVolume();
+
         SettingsChanged?.Invoke();
     }
 

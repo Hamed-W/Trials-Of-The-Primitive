@@ -38,8 +38,8 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private List<ItemUseType> equipmentValidationTypes = new List<ItemUseType>();
 
-
     public bool inputEnabled = true;
+    [SerializeField] private AudioManager audioManager;
 
 
 
@@ -83,12 +83,6 @@ public class Inventory : MonoBehaviour
 
     public int AddItem(ItemData itemData, int quantity = 1)
     {
-        if (itemData == null)
-        {
-            Debug.LogError("Inventory.AddItem was called with NULL ItemData!");
-            return quantity;
-        }
-
         int startQuantity = quantity;
         if (itemData.maximumStackSize > 1) // This fills any existing item stacks first, before creating new stacks.
         {
@@ -298,7 +292,11 @@ public class Inventory : MonoBehaviour
                 bool used = (itemHeld.itemData.itemUseType == ItemUseType.Consume) ? itemUseController.UseConsumableItem() : itemUseController.UseItem();
                 if (!used) return;
                 used = itemHeld.itemData.useEffect.Use(new ItemUseContext(player, this, itemHeld));
-                if (used) itemHeld.RemoveQuantity(1);
+                if (used)
+                {
+                    itemHeld.RemoveQuantity(1);
+                    if (itemHeld.itemData.useEffect is HealingEffect) audioManager.PlayHeal();
+                }
 
                 // If the item stack has no quantity, then remove the item stack from inventory and set the held item to null.
                 if (!itemHeld.HasQuantity())

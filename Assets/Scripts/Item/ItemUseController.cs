@@ -25,6 +25,8 @@ public class ItemUseController : MonoBehaviour
     [SerializeField] private SwingableCollision handSwingableCollision;
     [SerializeField] private ItemData handData;
 
+    [SerializeField] private AudioManager audioManager;
+
     void Awake()
     {
         playerStats.StatsChanged += UpdateAttackSpeed;
@@ -60,7 +62,11 @@ public class ItemUseController : MonoBehaviour
         animator.SetFloat("attackSpeed", finalAttackSpeed);
         animator.SetTrigger("swing");
 
+        if (swingableCollision.audioManager == null) swingableCollision.audioManager = audioManager;
+        audioManager.PlaySwordSwing();
+
         Invoke(nameof(ResetSwing), swingCooldown / finalAttackSpeed);
+
         return true;
     }
 

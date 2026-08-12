@@ -145,7 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumHealth: 20
   currentHealth: 0
-  itemDropper: {fileID: 0}
+  itemDropper: {fileID: 4341509359637856599}
 --- !u!114 &4341509359637856599
 MonoBehaviour:
   m_ObjectHideFlags: 0

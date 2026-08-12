@@ -1470,9 +1470,13 @@ MonoBehaviour:
   titleScreenPanel: {fileID: 1768309251}
   settingsPanel: {fileID: 1232147792}
   inGameMenuPanel: {fileID: 0}
+  recipePanel: {fileID: 0}
+  endGamePanel: {fileID: 0}
   activePanels: []
   firstPersonInput: {fileID: 0}
   thirdPersonInput: {fileID: 0}
+  endGameText: {fileID: 0}
+  audioManager: {fileID: 0}
 --- !u!114 &184589994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8639,7 +8643,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1232147796}
         m_TargetAssemblyTypeName: SettingsUI, Assembly-CSharp
-        m_MethodName: OnVolumeUpdate
+        m_MethodName: OnMusicVolumeUpdate
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10343,9 +10347,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeAmount: {fileID: 1510872718}
+  musicVolumeAmount: {fileID: 1691325080}
+  sFXVolumeAmount: {fileID: 184376764}
   sensitivityAmount: {fileID: 94295920}
   fovAmount: {fileID: 492862147}
   volumeSlider: {fileID: 909755550}
+  musicVolumeSlider: {fileID: 1005558008}
+  sFXVolumeSlider: {fileID: 1465001645}
   sensitivitySlider: {fileID: 100362863}
   fovSlider: {fileID: 2132958651}
 --- !u!1 &1233146130
@@ -12096,7 +12104,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1232147796}
         m_TargetAssemblyTypeName: SettingsUI, Assembly-CSharp
-        m_MethodName: OnVolumeUpdate
+        m_MethodName: OnSFXVolumeUpdate
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15051,6 +15059,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: 100
+  musicVolume: 100
+  sfxVolume: 100
   sensitivity: 1
   fov: 75
   inputActions: {fileID: -944628639613478452, guid: 1fc8e04a651b7b541998e6ace2220bca, type: 3}

@@ -7,10 +7,14 @@ using UnityEngine.UI;
 public class SettingsUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text volumeAmount;
+    [SerializeField] private TMP_Text musicVolumeAmount;
+    [SerializeField] private TMP_Text sFXVolumeAmount;
     [SerializeField] private TMP_Text sensitivityAmount;
     [SerializeField] private TMP_Text fovAmount;
 
     [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider sFXVolumeSlider;
     [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private Slider fovSlider;
 
@@ -35,6 +39,8 @@ public class SettingsUI : MonoBehaviour
     private void UpdateText()
     {
         OnVolumeUpdate(volumeSlider.value);
+        OnMusicVolumeUpdate(musicVolumeSlider.value);
+        OnSFXVolumeUpdate(sFXVolumeSlider.value);
         OnSensitivityUpdate(sensitivitySlider.value);
         OnFOVUpdate(fovSlider.value);
     }
@@ -44,6 +50,16 @@ public class SettingsUI : MonoBehaviour
     public void OnVolumeUpdate(float volume)
     {
         volumeAmount.text = Mathf.RoundToInt(volume).ToString() + "%";
+    }
+
+    public void OnMusicVolumeUpdate(float volume)
+    {
+        musicVolumeAmount.text = Mathf.RoundToInt(volume).ToString() + "%";
+    }
+
+    public void OnSFXVolumeUpdate(float volume)
+    {
+        sFXVolumeAmount.text = Mathf.RoundToInt(volume).ToString() + "%";
     }
 
 
@@ -63,7 +79,7 @@ public class SettingsUI : MonoBehaviour
     {
         if (SettingsManager.Instance == null) return;
 
-        SettingsManager.Instance.SaveSettings(volumeSlider.value, sensitivitySlider.value, fovSlider.value);
+        SettingsManager.Instance.SaveSettings(volumeSlider.value, musicVolumeSlider.value, sFXVolumeSlider.value, sensitivitySlider.value, fovSlider.value);
     }
 
     public void OnResetControls()

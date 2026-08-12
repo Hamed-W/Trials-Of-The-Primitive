@@ -10,6 +10,7 @@ public class SwingableCollision : MonoBehaviour
     public ParticleSystem sparks;
     public ItemData itemData;
     public PlayerStats playerStats;
+    public AudioManager audioManager;
 
     void OnTriggerStay(Collider other)
     {
@@ -28,6 +29,7 @@ public class SwingableCollision : MonoBehaviour
                     }
                     float damage = itemData.itemUseAmount * playerStats.damageModifier;
                     Debug.Log("Enemy Hit " + damage.ToString());
+                    audioManager.PlaySwordImpact();
                     enemy.GetComponent<EntityBehaviour>().TakeDamage(damage);
                 }
             }

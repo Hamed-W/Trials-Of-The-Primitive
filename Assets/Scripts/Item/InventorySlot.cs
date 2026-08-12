@@ -166,9 +166,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnSlotClick()
     {
-        Debug.Log("Hi 1");
         if (inventory.splitStack) splitStackPanel.SetActive(true);
-        Debug.Log("Hi 2");
         splitStackManager = splitStackPanel.GetComponent<SplitStackManager>();
         splitStackManager.selectedItem = inventory.items[slotIndex];
         splitStackManager.index = slotIndex;

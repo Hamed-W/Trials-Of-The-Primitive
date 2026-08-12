@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Wood Dagger
   m_EditorClassIdentifier: 
   ingredients:
-  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+  - itemData: {fileID: 0}
     quantity: 5
   - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
     quantity: 5
-  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+  - itemData: {fileID: 0}
     quantity: 5
   - itemData: {fileID: 0}
     quantity: 1

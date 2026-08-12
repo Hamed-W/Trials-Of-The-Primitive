@@ -21,6 +21,7 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private GameObject inGameMenuPanel;
     [SerializeField] private GameObject recipePanel;
     [SerializeField] private GameObject endGamePanel;
+    [SerializeField] private GameObject splitStackPanel;
 
     [SerializeField] private List<GameObject> activePanels = new List<GameObject>();
 
@@ -30,6 +31,8 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private CinemachineInputProvider thirdPersonInput;
 
     [SerializeField] private TMP_Text endGameText;
+
+    [SerializeField] private AudioManager audioManager;
 
 
 
@@ -63,12 +66,14 @@ public class UIHandler : MonoBehaviour
         if (!inventoryPanel.activeSelf)
         {
             activePanels.Add(inventoryPanel);
+            activePanels.Add(splitStackPanel);
             firstPersonInput.enabled = false;
             thirdPersonInput.enabled = false;
             inventory.inputEnabled = false;
         }
         else
         {
+            splitStackPanel.SetActive(false);
             firstPersonInput.enabled = true;
             thirdPersonInput.enabled = true;
             inventory.inputEnabled = true;
@@ -161,9 +166,14 @@ public class UIHandler : MonoBehaviour
         endGameText.text = won ? "You Win" : "You Died";
         activePanels.Add(endGamePanel);
 
+        if (won) audioManager.PlayVictoryMusic();
+        else audioManager.PlayDeathMusic();
+
         Time.timeScale = 0f;
+
         firstPersonInput.enabled = false;
         thirdPersonInput.enabled = false;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }

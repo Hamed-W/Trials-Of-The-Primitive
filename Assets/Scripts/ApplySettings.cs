@@ -8,6 +8,7 @@ public class ApplySettings : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private PlayerInput cameraPlayerInput;
     [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private AudioManager audioManager;
 
     private void Start()
     {
@@ -30,8 +31,8 @@ public class ApplySettings : MonoBehaviour
             return;
 
         SettingsManager.Instance.BindingsChanged -= ApplyBindings;
-        SettingsManager.Instance.SettingsChanged += ApplySoundSettings;
-        SettingsManager.Instance.SettingsChanged += ApplyGameSettings;
+        SettingsManager.Instance.SettingsChanged -= ApplySoundSettings;
+        SettingsManager.Instance.SettingsChanged -= ApplyGameSettings;
     }
 
     private void ApplyBindings()
@@ -43,6 +44,7 @@ public class ApplySettings : MonoBehaviour
     private void ApplySoundSettings()
     {
         SettingsManager.Instance.ApplyVolume();
+        audioManager.ApplyVolumes();
     }
 
     private void ApplyGameSettings()

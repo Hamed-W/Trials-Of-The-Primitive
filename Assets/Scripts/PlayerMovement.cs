@@ -34,6 +34,14 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private PlayerStats playerStats;
 
+    [SerializeField] private MapGenerator mapGenerator;
+    [SerializeField] private AudioManager audioManager;
+
+    [SerializeField] private float walkStepInterval = 0.5f;
+    [SerializeField] private float runStepInterval = 0.32f;
+
+    private float stepTimer;
+
 
     void Awake()
     {
@@ -52,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         HandleMovement();
+        HandleFootstepsSound();
     }
 
     void LateUpdate()
@@ -130,7 +139,24 @@ public class PlayerMovement : MonoBehaviour
             : AnimState.Idle));
 
         playerAnimScript.SetAnimState(finalAnimation);
+    }
 
+    private void HandleFootstepsSound()
+    {
+        if (!characterController.isGrounded || moveInput.sqrMagnitude < 0.01f)
+        {
+            stepTimer = 0f;
+            return;
+        }
+
+        stepTimer -= Time.deltaTime;
+        if (stepTimer > 0f) return;
+
+        Biome biome = mapGenerator.GetBiomeFromCoord(transform.position);
+        if (biome == Biome.None) biome = Biome.Grass;
+        audioManager.PlayFootstep(biome);
+
+        stepTimer = isSprinting ? runStepInterval : walkStepInterval;
     }
 
     void OnMove(InputValue value)

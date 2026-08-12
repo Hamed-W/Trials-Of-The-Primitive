@@ -50,6 +50,9 @@ public abstract class EntityBehaviour : MonoBehaviour
 
     [SerializeField] protected EntityUIHandler entityUI;
 
+    [SerializeField] protected AudioSource audioSource;
+    [SerializeField] protected AudioClip deathSound;
+
 
 
     protected virtual void Awake()
@@ -338,6 +341,8 @@ public abstract class EntityBehaviour : MonoBehaviour
     public virtual void Die()
     {
         ChangeState(EntityState.Dead);
+        if (audioSource != null && deathSound != null) audioSource.PlayOneShot(deathSound);
+
         Invoke(nameof(DestroyEntity), 2f);
     }
 

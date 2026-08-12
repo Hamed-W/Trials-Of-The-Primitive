@@ -45,6 +45,7 @@ public class DayNightCycle : MonoBehaviour
 
     [SerializeField] private int daysToSurvive = 10;
     [SerializeField] private UIHandler uiHandler;
+    [SerializeField] private AudioManager audioManager;
 
     void Awake()
     {
@@ -94,15 +95,12 @@ public class DayNightCycle : MonoBehaviour
         float sunAngle = timeOfDay * 360f - 90f;
 
         sunlight.transform.rotation = Quaternion.Euler(sunAngle, 170f, 0f);
-
         moonlight.transform.rotation = Quaternion.Euler(sunAngle + 180f, 170f, 0f);
 
         sunlight.intensity = sunIntensity.Evaluate(timeOfDay);
-
         moonlight.intensity = moonIntensity.Evaluate(timeOfDay);
 
         sunlight.color = sunColor.Evaluate(timeOfDay);
-
         moonlight.color = moonColor.Evaluate(timeOfDay);
     }
 
@@ -129,6 +127,7 @@ public class DayNightCycle : MonoBehaviour
 
         Debug.Log("Night started");
 
+        audioManager.PlayNightMusic();
         OnNightStarted?.Invoke();
     }
 
@@ -147,6 +146,7 @@ public class DayNightCycle : MonoBehaviour
             return;
         }
 
+        audioManager.PlayDayMusic();
         OnDayStarted?.Invoke();
     }
 }
