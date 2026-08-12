@@ -11,7 +11,6 @@ public class SwingableCollision : MonoBehaviour
     public ItemData itemData;
     public PlayerStats playerStats;
     public AudioManager audioManager;
-    public ItemData handItemData;
 
     void OnTriggerStay(Collider other)
     {
