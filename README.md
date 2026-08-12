@@ -55,8 +55,6 @@ Unarmed attacks when no item is currently held.
 
 Attack animations use collision windows so enemies are only damaged during the appropriate part of an attack.
 
-Combat includes impact particle effects such as sparks and blood droplets.
-
 
 Equipment
 
