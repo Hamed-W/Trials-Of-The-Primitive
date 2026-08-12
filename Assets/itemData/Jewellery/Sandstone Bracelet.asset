@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Sandstone Bracelet
+  m_EditorClassIdentifier: 
+  itemName: Sandstone Bracelet
+  icon: {fileID: 21300000, guid: 86ceb8c2b17610540ab0f6c9f30a0a30, type: 3}
+  description: 
+  maximumStackSize: 1
+  worldPrefab: {fileID: 7321377178076910098, guid: 984e4687bc197e244ab167882cd01f68, type: 3}
+  itemUseType: 6
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 1
+  attachment: 1
+  inHandPrefab: {fileID: 7321377178076910098, guid: c9accf7251fae6348ad2b8da45c38986, type: 3}
+  equippedPrefab: {fileID: 7321377178076910098, guid: ab30c2db8a9108a409d5bbeeeb8b2035, type: 3}
+  statModifiers:
+  - statType: 3
+    amount: 1

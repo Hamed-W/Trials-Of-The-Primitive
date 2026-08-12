@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Sandstone
+  m_EditorClassIdentifier: 
+  itemName: Sandstone
+  icon: {fileID: 21300000, guid: d9f49635fa545324ba7aec3f7dbd95be, type: 3}
+  description: 
+  maximumStackSize: 99
+  worldPrefab: {fileID: 976961419231179255, guid: cf719cebef5330d42816f6e1a870e9d3, type: 3}
+  itemUseType: 0
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 8373450894912583155, guid: 80cf9da9bbd8382449be636fbe0def5f, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers: []

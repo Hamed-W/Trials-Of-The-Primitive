@@ -36,6 +36,11 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private GameObject bodyArmor;
 
+    [SerializeField] private List<ItemUseType> equipmentValidationTypes = new List<ItemUseType>();
+
+
+    public bool inputEnabled = true;
+
 
 
     private void Awake()
@@ -78,6 +83,12 @@ public class Inventory : MonoBehaviour
 
     public int AddItem(ItemData itemData, int quantity = 1)
     {
+        if (itemData == null)
+        {
+            Debug.LogError("Inventory.AddItem was called with NULL ItemData!");
+            return quantity;
+        }
+
         int startQuantity = quantity;
         if (itemData.maximumStackSize > 1) // This fills any existing item stacks first, before creating new stacks.
         {
@@ -227,7 +238,7 @@ public class Inventory : MonoBehaviour
     {
         ItemUseType itemUseType = itemToEquip.itemData.itemUseType;
 
-        if (itemUseType == ItemUseType.Shield || itemUseType == ItemUseType.Helmet || itemUseType == ItemUseType.Armor)
+        if (equipmentValidationTypes.Contains(itemUseType))
         {
             Item equippedItem = equippedItems.Find(e => e.itemData.itemUseType == itemUseType);
             if (equippedItem != null)
@@ -267,7 +278,13 @@ public class Inventory : MonoBehaviour
 
     public void OnUseItem(InputValue value)
     {
-        if (itemHeld == null || itemHeld.itemData == null) return;
+        if (!inputEnabled) return;
+
+        if (itemHeld == null || itemHeld.itemData == null)
+        {
+            bool used = itemUseController.SwingHand();
+            return;
+        }
 
         if (itemHeld.itemData.equippable)
         {

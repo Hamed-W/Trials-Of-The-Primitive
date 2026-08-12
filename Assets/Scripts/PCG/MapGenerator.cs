@@ -1,9 +1,11 @@
-using UnityEngine;
-using Unity.AI.Navigation;
 using System;
-using UnityEngine.UIElements;
-using UnityEditor;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Experimental.AI;
+using UnityEngine.UIElements;
 
 
 public class MapGenerator : MonoBehaviour
@@ -84,8 +86,12 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] private GameObject objectParent;
 
+    [SerializeField] private float boundaryHeight = 50f;
+    [SerializeField] private float boundaryWidth = 2f;
+
     void Awake()
     {
+        seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         GenerateMap();
     }
 
@@ -106,20 +112,17 @@ public class MapGenerator : MonoBehaviour
 
         //float[,] heightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, noiseScale, octaves, persistence, lacunarity, offset);
         biomeMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 1000, biomeScale, 1, 0.5f, 2f, offset);
-
         float[,] grassHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed, grassNoiseScale, grassOctaves, grassPersistence, grassLacunarity, offset);
         float[,] desertHeightMap = Noise.GenerateNoiseMap(mapVertexSize, mapVertexSize, seed + 2000, desertNoiseScale, desertOctaves, desertPersistence, desertLacunarity, offset);
-
         Texture2D biomeTexture = CreateBiomeTexture(biomeMap);
 
         finalHeightMap = BlendBiomeHeights(biomeMap, grassHeightMap, desertHeightMap);
         
-
         MeshData meshData = MeshGenerator.GenerateTerrainMesh(finalHeightMap, levelOfDetail);
-
         Mesh generatedMesh = meshData.CreateMesh();
-
         terrainMap = new TerrainMap(mapVertexSize, transform, terrainMaterial, generatedMesh, biomeTexture);
+
+        CreateMapBoundaries();
 
         Physics.SyncTransforms();
 
@@ -172,15 +175,6 @@ public class MapGenerator : MonoBehaviour
         {
             attempts++;
 
-            //int x = Random.Range(0, width);
-            //int y = Random.Range(0, height);
-
-            /*float worldX = topLeftX + x;
-            float worldZ = topLeftZ - y;
-            float worldY = heightMap[x, y] + objectHeightOffset;
-
-            Vector3 position = new Vector3(worldX, worldY, worldZ);*/
-
             float worldX = UnityEngine.Random.Range(topLeftX, -topLeftX);
 
             float worldZ = UnityEngine.Random.Range(-topLeftZ, topLeftZ);
@@ -224,6 +218,16 @@ public class MapGenerator : MonoBehaviour
             GameObject prefab = prefabs[UnityEngine.Random.Range(0, prefabs.Count)];
 
             GameObject spawnedObject = Instantiate(prefab, position, Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f), parent);
+
+            BiomeObjectRespawn respawn = spawnedObject.GetComponent<BiomeObjectRespawn>();
+
+            if (respawn != null)
+            {
+                Biome biome = GetBiomeFromCoord(position);
+                respawn.mapGenerator = this;
+                respawn.originalPrefab = prefab;
+                respawn.biome = biome;
+            }
 
             float randomScale = UnityEngine.Random.Range(0.8f, 1.2f);
 
@@ -357,6 +361,50 @@ public class MapGenerator : MonoBehaviour
         {
             return Biome.None;
         }
+    }
+
+    private void CreateMapBoundaries()
+    {
+        float mapSize = mapVertexSize - 1;
+        float halfSize = mapSize / 2f;
+
+        GameObject boundaryParent = new GameObject("Map Boundaries");
+        boundaryParent.transform.SetParent(transform);
+
+        CreateBoundary(boundaryParent.transform, new Vector3(0f, boundaryHeight / 2f, halfSize), new Vector3(mapSize, boundaryHeight, boundaryWidth));
+        CreateBoundary(boundaryParent.transform, new Vector3(0f, boundaryHeight / 2f, -halfSize), new Vector3(mapSize, boundaryHeight, boundaryWidth));
+        CreateBoundary(boundaryParent.transform, new Vector3(halfSize, boundaryHeight / 2f, 0f), new Vector3(boundaryWidth, boundaryHeight, mapSize));
+        CreateBoundary(boundaryParent.transform, new Vector3(-halfSize, boundaryHeight / 2f, 0f), new Vector3(boundaryWidth, boundaryHeight, mapSize));
+    }
+
+
+    private void CreateBoundary(Transform parent, Vector3 position, Vector3 size)
+    {
+        GameObject boundary = new GameObject("Boundary");
+        boundary.transform.SetParent(parent);
+        boundary.transform.localPosition = position;
+
+        BoxCollider collider = boundary.AddComponent<BoxCollider>();
+        collider.size = size;
+    }
+
+    public void RespawnBiomeObject(GameObject prefab, Biome biome, Transform parent, float delay = 30f)
+    {
+        StartCoroutine(RespawnBiomeObjectCoroutine(prefab, biome, parent, delay));
+    }
+
+    private IEnumerator RespawnBiomeObjectCoroutine(GameObject prefab, Biome biome, Transform parent, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        BiomePrefabs biomeData = biomeObjectPrefabs.Find(x => x.biome == biome);
+        if (biomeData == null) yield break;
+
+        List<GameObject> tempList = new List<GameObject>();
+        tempList.Add(prefab);
+
+        SpawnObjectsForBiome(tempList, 1, biomeData.biomeMapRangeStart, biomeData.biomeMapRangeEnd, parent, objectLayerMask);
+
     }
 
 

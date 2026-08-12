@@ -22,6 +22,9 @@ public class ItemUseController : MonoBehaviour
 
     [SerializeField] private PlayerStats playerStats;
 
+    [SerializeField] private SwingableCollision handSwingableCollision;
+    [SerializeField] private ItemData handData;
+
     void Awake()
     {
         playerStats.StatsChanged += UpdateAttackSpeed;
@@ -54,11 +57,23 @@ public class ItemUseController : MonoBehaviour
 
         float finalAttackSpeed = attackSpeed * itemAttackSpeed;
 
-        animator.SetFloat("attackSpeed", attackSpeed);
+        animator.SetFloat("attackSpeed", finalAttackSpeed);
         animator.SetTrigger("swing");
 
         Invoke(nameof(ResetSwing), swingCooldown / finalAttackSpeed);
         return true;
+    }
+
+    public bool SwingHand()
+    {
+        SetHandSwingableCollision();
+        return SwingItem();
+    }
+
+    private void SetHandSwingableCollision()
+    {
+        swingableCollision = handSwingableCollision;
+        itemAttackSpeed = 1;
     }
 
     public bool UseItem()

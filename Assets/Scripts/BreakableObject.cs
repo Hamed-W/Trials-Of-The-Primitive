@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BreakableObject : MonoBehaviour
 {
-    [SerializeField] private float maximumHealth = 30f;
+    [SerializeField] private float maximumHealth = 20f;
 
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
     private bool destroyed; //Allows me to later invoke the Destroy function (delay it for some animation) without it being called multiple times. Also if somehow player calls TakeDamage after the object is destroyed, it won't call DestroyObject again.
 
     [SerializeField] private ItemDropper itemDropper;
@@ -16,12 +16,10 @@ public class BreakableObject : MonoBehaviour
         currentHealth = maximumHealth;
     }
 
-    void Start()
-    {
-    }
-
     public void TakeDamage(float damage)
     {
+        Debug.Log("Hi");
+        if (damage < (0.1 * maximumHealth)) return;
         Debug.Log($"Took {damage} damage");
         if (destroyed) return;
 
@@ -29,6 +27,8 @@ public class BreakableObject : MonoBehaviour
 
         if (currentHealth <= 0f)
         {
+            BiomeObjectRespawn respawn = GetComponent<BiomeObjectRespawn>();
+            if (respawn != null) respawn.Respawn();
             DestroyObject();
         }
     }

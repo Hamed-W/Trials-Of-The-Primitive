@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Iron
+  m_EditorClassIdentifier: 
+  itemName: Iron
+  icon: {fileID: 21300000, guid: bdf298fd5838e814faa8ac7a68090405, type: 3}
+  description: 
+  maximumStackSize: 99
+  worldPrefab: {fileID: 9069142804171427945, guid: 5242068d5cb8b4e43b32f97d9b2a259f, type: 3}
+  itemUseType: 0
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 2050473970686044383, guid: 146b3543ccdf40e47bb3d0ece07e6757, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers: []

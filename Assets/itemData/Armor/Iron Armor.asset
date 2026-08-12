@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Iron Armor
   m_EditorClassIdentifier: 
   itemName: Iron Armor
-  icon: {fileID: 21300000, guid: 6054318fc678eef4e97655493b73c580, type: 3}
+  icon: {fileID: 21300000, guid: c600c2ca365c83f48b3f6f164573da04, type: 3}
   description: 
   maximumStackSize: 1
   worldPrefab: {fileID: 5627826626483245019, guid: 923d7199e6bec0c4a9f70815ef6f64eb, type: 3}
-  itemUseType: 6
+  itemUseType: 5
   useEffect: {fileID: 0}
   itemUseAmount: 0
   isPickaxe: 0

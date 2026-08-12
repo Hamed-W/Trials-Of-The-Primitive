@@ -31,6 +31,7 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private AnimationCurve ambientIntensity;
 
     [SerializeField] private float dayLength = 120f;
+    public float nightDuration;
 
     [SerializeField] private TMP_Text timeText;
 
@@ -42,9 +43,24 @@ public class DayNightCycle : MonoBehaviour
     public event Action OnNightStarted;
     public event Action OnDayStarted;
 
+    [SerializeField] private int daysToSurvive = 10;
+    [SerializeField] private UIHandler uiHandler;
+
+    void Awake()
+    {
+        nightDuration = dayLength * (1f - 0.9f + 0.25f);
+    }
+
+    private void Start()
+    {
+
+        timeOfDay = 0.25f;
+        StartDay();
+    }
 
     private void Update()
     {
+
         timeOfDay += Time.deltaTime / dayLength;
 
         if (timeOfDay >= 1f) timeOfDay = 0f;
@@ -52,8 +68,6 @@ public class DayNightCycle : MonoBehaviour
         UpdateSkybox();
         UpdateSunAndMoon();
         UpdateAmbientLight();
-
-        timeText.text = GetTimeString();
 
         if (!isDay && (timeOfDay < 0.9f && timeOfDay >= 0.25f))
         {
@@ -64,6 +78,9 @@ public class DayNightCycle : MonoBehaviour
         {
             StartNight();
         }
+        string dayOrNight = isDay ? "Day " : "Night ";
+
+        timeText.text = dayOrNight + dayCount.ToString() + " - " + GetTimeString();
     }
 
     private void UpdateSkybox ()
@@ -123,6 +140,12 @@ public class DayNightCycle : MonoBehaviour
         dayCount++;
 
         Debug.Log($"Day {dayCount} started");
+
+        if (dayCount > daysToSurvive)
+        {
+            uiHandler.OpenEndGamePanel(true);
+            return;
+        }
 
         OnDayStarted?.Invoke();
     }

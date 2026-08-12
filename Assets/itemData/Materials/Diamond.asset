@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Diamond
+  m_EditorClassIdentifier: 
+  itemName: Diamond
+  icon: {fileID: 21300000, guid: b2a72759820feab4eafb28f2e99ded3d, type: 3}
+  description: 
+  maximumStackSize: 99
+  worldPrefab: {fileID: 1085144320066602534, guid: d22afd83ddb5b6c47a2a3cd6fd9b42a8, type: 3}
+  itemUseType: 0
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 4658600050668139827, guid: 923054df37f897e4a8467406856b7e2e, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers: []

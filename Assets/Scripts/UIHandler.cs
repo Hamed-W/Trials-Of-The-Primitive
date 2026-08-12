@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class UIHandler : MonoBehaviour
     [SerializeField] private GameObject titleScreenPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject inGameMenuPanel;
+    [SerializeField] private GameObject recipePanel;
+    [SerializeField] private GameObject endGamePanel;
 
     [SerializeField] private List<GameObject> activePanels = new List<GameObject>();
 
@@ -25,6 +28,8 @@ public class UIHandler : MonoBehaviour
 
     [SerializeField] private CinemachineInputProvider firstPersonInput;
     [SerializeField] private CinemachineInputProvider thirdPersonInput;
+
+    [SerializeField] private TMP_Text endGameText;
 
 
 
@@ -53,14 +58,25 @@ public class UIHandler : MonoBehaviour
 
     void OnOpenInventory()
     {
+        if (inventoryPanel == null) return;
+        if (inGameMenuPanel.activeSelf) return;
+        if (!inventoryPanel.activeSelf)
+        {
+            activePanels.Add(inventoryPanel);
+            firstPersonInput.enabled = false;
+            thirdPersonInput.enabled = false;
+            inventory.inputEnabled = false;
+        }
+        else
+        {
+            firstPersonInput.enabled = true;
+            thirdPersonInput.enabled = true;
+            inventory.inputEnabled = true;
+            craftingManager.ClearCraftingItems();
+        }
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         Cursor.lockState = inventoryPanel.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = inventoryPanel.activeSelf;
-
-        if (!inventoryPanel.activeSelf)
-        {
-            craftingManager.ClearCraftingItems();
-        }
     }
 
     void OnSplitStack(InputValue value)
@@ -80,6 +96,7 @@ public class UIHandler : MonoBehaviour
         {
             panel.SetActive(false);
         }
+        activePanels.Clear();
     }
 
     public void StartGame()
@@ -115,8 +132,17 @@ public class UIHandler : MonoBehaviour
         activePanels.Add(settingsPanel);
     }
 
+    public void OpenRecipePanel()
+    {
+        ClearPanels();
+
+        recipePanel.SetActive(true);
+        activePanels.Add(recipePanel);
+    }
+
     public void OpenInGameMenuPanel()
     {
+        if (activePanels.Contains(inventoryPanel)) craftingManager.ClearCraftingItems();
         firstPersonInput.enabled = false;
         thirdPersonInput.enabled = false;
         paused = true;
@@ -126,6 +152,20 @@ public class UIHandler : MonoBehaviour
         ClearPanels();
         inGameMenuPanel.SetActive(true);
         activePanels.Add(inGameMenuPanel);
+    }
+
+    public void OpenEndGamePanel(bool won)
+    {
+        ClearPanels();
+        endGamePanel.SetActive(true);
+        endGameText.text = won ? "You Win" : "You Died";
+        activePanels.Add(endGamePanel);
+
+        Time.timeScale = 0f;
+        firstPersonInput.enabled = false;
+        thirdPersonInput.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void CloseInGameMenuPanel()

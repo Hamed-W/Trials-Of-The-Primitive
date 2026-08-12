@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Bear Meat
+  m_EditorClassIdentifier: 
+  itemName: Bear Meat
+  icon: {fileID: 21300000, guid: ab6166e9e748e5b40bc1669c30691140, type: 3}
+  description: 
+  maximumStackSize: 99
+  worldPrefab: {fileID: 5994673790625879176, guid: be9509cd1cc0aee47afd65440b30e97b, type: 3}
+  itemUseType: 3
+  useEffect: {fileID: 11400000, guid: aa27294ed0127ee46befd68975ee7fdb, type: 2}
+  itemUseAmount: 70
+  isPickaxe: 0
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 4337579765563697599, guid: 29bd7bc9d1f928448aa252444493dd8d, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers: []

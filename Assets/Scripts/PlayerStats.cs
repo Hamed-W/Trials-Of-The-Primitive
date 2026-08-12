@@ -22,9 +22,10 @@ public class PlayerStats : MonoBehaviour
     public float damageModifier;
 
     public event Action StatsChanged;
-    public event Action PlayerDied; // Set of functions that should happen when player dies.
 
-    private bool dead;
+    [SerializeField] private bool dead;
+
+    [SerializeField] private UIHandler uiHandler;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class PlayerStats : MonoBehaviour
         movementSpeed = baseMovementSpeed;
         attackSpeed = baseAttackSpeed;
         damageModifier = baseDamageModifier;
+
     }
 
     private void Update()
@@ -61,7 +63,8 @@ public class PlayerStats : MonoBehaviour
 
         StatsChanged?.Invoke();
 
-        if (currentHealth <= 0f) Die();
+        if (currentHealth <= 0f)
+            Die();
     }
 
     public bool Heal(float amount)
@@ -93,10 +96,10 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         if (dead) return;
-        dead = true;
         Debug.Log("Player died.");
 
-        PlayerDied?.Invoke();
+        dead = true;
+        uiHandler.OpenEndGamePanel(false);
     }
 
     public void RecalculateStats(List<Item> equippedItems)

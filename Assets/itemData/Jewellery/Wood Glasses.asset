@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Wood Glasses
+  m_EditorClassIdentifier: 
+  itemName: Wood Glasses
+  icon: {fileID: 21300000, guid: 4a5b56d74215978429995bc8cd34111e, type: 3}
+  description: 
+  maximumStackSize: 1
+  worldPrefab: {fileID: 8919381756729700623, guid: c65e0c4fa4632144f8e808df5edfe98c, type: 3}
+  itemUseType: 7
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 1
+  attachment: 3
+  inHandPrefab: {fileID: 8919381756729700623, guid: 805b19c4e6bb0ab479f2bd0ab5b76191, type: 3}
+  equippedPrefab: {fileID: 8919381756729700623, guid: 4686bac32cb13ae409425de9f3f7bfca, type: 3}
+  statModifiers:
+  - statType: 2
+    amount: 0.5

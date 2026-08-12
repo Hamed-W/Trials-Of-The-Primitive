@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Diamond Pickaxe
+  m_EditorClassIdentifier: 
+  itemName: Diamond Pickaxe
+  icon: {fileID: 21300000, guid: 2fdb67a9fd902b7429f5bd1c232a1b3f, type: 3}
+  description: 'Object Damage: 200'
+  maximumStackSize: 1
+  worldPrefab: {fileID: 5295420516340793931, guid: bc9710b27f0d80e42b2bb8f8bd40d5dc, type: 3}
+  itemUseType: 1
+  useEffect: {fileID: 0}
+  itemUseAmount: 200
+  isPickaxe: 1
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 788333040015838540, guid: c6135da4e7f4a544abe4254ee37bad83, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers:
+  - statType: 2
+    amount: 1

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Diamond Bracelet
+  m_EditorClassIdentifier: 
+  itemName: Diamond Bracelet
+  icon: {fileID: 21300000, guid: 3c265dbad18f9b34a8d4fe0c7f2c1ed6, type: 3}
+  description: 
+  maximumStackSize: 1
+  worldPrefab: {fileID: 7321377178076910098, guid: 5c3a2a62e7439db4c836a05254891063, type: 3}
+  itemUseType: 6
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 1
+  attachment: 1
+  inHandPrefab: {fileID: 7321377178076910098, guid: 8aae97a7eb5105a40a025175e1e68a26, type: 3}
+  equippedPrefab: {fileID: 7321377178076910098, guid: 152d15e75d833d048bd4007aed351627, type: 3}
+  statModifiers:
+  - statType: 3
+    amount: 3

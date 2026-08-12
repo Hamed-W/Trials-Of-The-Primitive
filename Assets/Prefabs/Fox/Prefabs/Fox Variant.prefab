@@ -1051,10 +1051,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   possibleDrops:
-  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
+  - itemData: {fileID: 11400000, guid: a56629cf778061c498e525411e24c587, type: 2}
     dropChance: 1
     minimumQuantity: 1
-    maximumQuantity: 10
+    maximumQuantity: 3
   spawnPoint: {fileID: 0}
 --- !u!65 &3170056931788050172
 BoxCollider:

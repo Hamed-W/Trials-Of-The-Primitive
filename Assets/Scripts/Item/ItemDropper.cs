@@ -14,6 +14,7 @@ public class ItemDropper : MonoBehaviour
 
     public void DropItems()
     {
+        Vector3 position = new Vector3(transform.position.x, transform.position.y + 3f, transform.position.z);
         Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
 
         foreach (DropData drop in possibleDrops)

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Healing Potion
+  m_EditorClassIdentifier: 
+  itemName: Healing Potion
+  icon: {fileID: 21300000, guid: 50af3298ce7604b49bada5300e6d4a02, type: 3}
+  description: Heals 100 HP
+  maximumStackSize: 99
+  worldPrefab: {fileID: 5795936865022208544, guid: a10ab0cb98cbc314cb66f6ca2cafc87c, type: 3}
+  itemUseType: 3
+  useEffect: {fileID: 11400000, guid: bde42836e4a0a054d9c32248ed6c448c, type: 2}
+  itemUseAmount: 100
+  isPickaxe: 0
+  equippable: 0
+  attachment: 0
+  inHandPrefab: {fileID: 5795936865022208544, guid: 3b05ba4283f8b1545a5a383f5a05384c, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers: []

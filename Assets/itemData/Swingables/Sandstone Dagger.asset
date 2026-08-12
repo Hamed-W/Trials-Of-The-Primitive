@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Sandstone Dagger
+  m_EditorClassIdentifier: 
+  itemName: Dagger
+  icon: {fileID: 21300000, guid: 3b0dab1506d633048a4a69846b7bd781, type: 3}
+  description: 'Damage: 50, AttackSpeed: 2x'
+  maximumStackSize: 1
+  worldPrefab: {fileID: 4951584634656736229, guid: b2001fad622a8944c980434a5fb33803, type: 3}
+  itemUseType: 1
+  useEffect: {fileID: 0}
+  itemUseAmount: 50
+  isPickaxe: 0
+  equippable: 0
+  attachment: 1
+  inHandPrefab: {fileID: 4951584634656736229, guid: 66228727c4e497a4da77f8710c503a03, type: 3}
+  equippedPrefab: {fileID: 0}
+  statModifiers:
+  - statType: 2
+    amount: 2

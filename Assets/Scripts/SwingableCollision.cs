@@ -21,6 +21,11 @@ public class SwingableCollision : MonoBehaviour
                 if (midSwing && !objectsHit.Contains(enemy))
                 {
                     objectsHit.Add(enemy);
+                    if (sparks != null)
+                    {
+                        Debug.Log("Emitted");
+                        sparks.Emit(5);
+                    }
                     float damage = itemData.itemUseAmount * playerStats.damageModifier;
                     Debug.Log("Enemy Hit " + damage.ToString());
                     enemy.GetComponent<EntityBehaviour>().TakeDamage(damage);

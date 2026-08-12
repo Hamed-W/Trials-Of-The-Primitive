@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a463e90b1f3cd34ca57544129a7fc3f, type: 3}
+  m_Name: Diamond Glasses
+  m_EditorClassIdentifier: 
+  itemName: Diamond Glasses
+  icon: {fileID: 21300000, guid: 60b003a51d2b9f0429119fd3be9ff724, type: 3}
+  description: 
+  maximumStackSize: 1
+  worldPrefab: {fileID: 2724777596335070711, guid: 74430d03c4d9b984b8a72e917cd63fa0, type: 3}
+  itemUseType: 7
+  useEffect: {fileID: 0}
+  itemUseAmount: 0
+  isPickaxe: 0
+  equippable: 1
+  attachment: 3
+  inHandPrefab: {fileID: 8919381756729700623, guid: 64c4b4945fa074e4682519288381a166, type: 3}
+  equippedPrefab: {fileID: 3366071213020455073, guid: c104cd623d1dc434880331cad49b3383, type: 3}
+  statModifiers:
+  - statType: 2
+    amount: 2

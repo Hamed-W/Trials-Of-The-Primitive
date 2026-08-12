@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   itemName: Shield
-  icon: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: c9e0a6f790728124aad378c302ca1b21, type: 3}
   description: 
   maximumStackSize: 1
   worldPrefab: {fileID: 8989109606312072488, guid: 04b1b13e1b5aa4047957ae3aabe4b79c, type: 3}
   itemUseType: 4
   useEffect: {fileID: 0}
-  itemUseAmount: 20
+  itemUseAmount: 40
+  isPickaxe: 0
   equippable: 1
   attachment: 2
   inHandPrefab: {fileID: 4811934317335652646, guid: 1ab6ff81171b2974b865d08f3a5a841a, type: 3}

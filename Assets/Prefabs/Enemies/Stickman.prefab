@@ -390,7 +390,7 @@ MonoBehaviour:
   - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
     dropChance: 1
     minimumQuantity: 1
-    maximumQuantity: 10
+    maximumQuantity: 5
   spawnPoint: {fileID: 0}
 --- !u!136 &297056155541578624
 CapsuleCollider:

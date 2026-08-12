@@ -21,10 +21,9 @@ public class CraftingUI : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            Item item =
-                craftingManager.craftingItems[i];
+            Item item = craftingManager.craftingItems[i];
 
-            if (item != null)
+            if (item != null && item.itemData != null)
             {
                 slots[i].SetItem(item);
             }

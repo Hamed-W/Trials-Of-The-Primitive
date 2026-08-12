@@ -14,7 +14,7 @@ public class CraftingManager : MonoBehaviour
 
     [SerializeField] private Transform itemDropPoint;
 
-    [SerializeField] private List<CraftingRecipe> recipes = new List<CraftingRecipe>();
+    public List<CraftingRecipe> recipes = new List<CraftingRecipe>();
 
     private void Awake()
     {
@@ -139,14 +139,15 @@ public class CraftingManager : MonoBehaviour
         Item inventoryItem = inventory.items[inventoryIndex];
         Item craftingItem = craftingItems[craftingIndex];
 
-        if (craftingItem == null && inventoryItem == null) return;
+        if ((craftingItem == null || craftingItem.itemData == null) && (inventoryItem == null || inventoryItem.itemData == null))
+            return;
 
         inventory.RemoveItem(inventoryIndex);
 
         craftingItems[craftingIndex] = inventoryItem;
 
         if (craftingItem != null)
-        { 
+        {
             inventory.AddItem(craftingItem.itemData, craftingItem.quantity);
         }
 
@@ -176,7 +177,15 @@ public class CraftingManager : MonoBehaviour
         for (int i = 0; i < craftingItems.Count; i++)
         {
             Item item = craftingItems[i];
-            if (item == null) continue;
+
+            if (item == null)
+                continue;
+
+            if (item.itemData == null)
+            {
+                craftingItems[i] = null;
+                continue;
+            }
 
             item.quantity = inventory.AddItem(item.itemData, item.quantity);
 
@@ -192,21 +201,4 @@ public class CraftingManager : MonoBehaviour
 
         CraftingChanged?.Invoke();
     }
-}
-
-
-[CreateAssetMenu(fileName = "New Crafting Recipe", menuName = "Crafting/Recipe")]
-public class CraftingRecipe : ScriptableObject
-{
-    public RecipeIngredient[] ingredients = new RecipeIngredient[9];
-
-    public ItemData resultItem;
-    public int resultQuantity = 1;
-}
-
-[System.Serializable]
-public class RecipeIngredient
-{
-    public ItemData itemData;
-    public int quantity = 1;
 }

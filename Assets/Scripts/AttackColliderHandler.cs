@@ -16,16 +16,7 @@ public class AttackColliderHandler : MonoBehaviour
     {
         attackCollider.enabled = true;
     }
-    /*
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player") && !behaviourScript.playerAttacked)
-        {
-            Debug.Log("Player is in attack range");
-            behaviourScript.OnAttackHit(other.gameObject);
-            //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-        }
-    }*/
+
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player") && !behaviourScript.playerAttacked)

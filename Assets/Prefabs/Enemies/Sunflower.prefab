@@ -1025,7 +1025,6 @@ MonoBehaviour:
     - {fileID: 2084865156301665633}
     - {fileID: 2439452316758660157}
   attackMoveSpeedMultiplier: 0.4
-  attackExitRangeMultiplier: 1.25
   playerAttacked: 0
 --- !u!65 &176655938477611326
 BoxCollider:
@@ -1088,10 +1087,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   possibleDrops:
-  - itemData: {fileID: 11400000, guid: e34b131a1ffb8a5458b80be660a270b4, type: 2}
-    dropChance: 1
+  - itemData: {fileID: 11400000, guid: 586059e95802d7048b16de1834dee303, type: 2}
+    dropChance: 0.3
     minimumQuantity: 1
-    maximumQuantity: 10
+    maximumQuantity: 3
   spawnPoint: {fileID: 0}
 --- !u!65 &5298052311683520815
 BoxCollider:

@@ -37,7 +37,7 @@ public enum EquipmentAttachment
     LeftHand,
     Head,
     Back,
-    Chest
+    Neck
 }
 
 public enum ItemUseType
@@ -47,8 +47,10 @@ public enum ItemUseType
     Use,
     Consume,
     Shield,
-    Helmet,
-    Armor
+    Armor,
+    Bracelet,
+    Glasses,
+    Pendant
 }
 
 [System.Serializable]

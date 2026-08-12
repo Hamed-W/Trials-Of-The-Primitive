@@ -20,7 +20,6 @@ public class EntitySpawner : MonoBehaviour
     [SerializeField] private int baseEnemiesPerNight;
     [SerializeField] private int enemiesAddedPerNight;
 
-    [SerializeField] private float spawnDelay = 1f;
 
     private List<GameObject> spawnedEntities = new List<GameObject>();
 
@@ -94,12 +93,15 @@ public class EntitySpawner : MonoBehaviour
     {
         int amount = baseEnemiesPerNight + dayNightCycle.dayCount * enemiesAddedPerNight;
 
+        if (amount == 0) yield break;
+
+        float spawnInterval = dayNightCycle.nightDuration / amount;
+
         for (int i = 0; i < amount; i++)
         {
             SpawnEnemy();
-            yield return new WaitForSeconds(spawnDelay);
+            yield return new WaitForSeconds(spawnInterval);
         }
-
         nightWaveCoroutine = null;
     }
 
